@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JCC Stockroom</title>
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <header>
+    <img src="assets/JCC-logo.png" alt="JCC Logo" class="header-logo left-logo" id="jcc-logo" />
+    <img src="assets/JCC_Stockroom_Logo.png" alt="JCC Stockroom Logo" class="header-logo right-logo" id="stockroom-logo" />
+  </header>
+
+  <nav class="tab-bar">
+    <button class="tab-link" data-module="dashboard">Dashboard</button>
+    <button class="tab-link" data-module="inventory">Inventory</button>
+    <button class="tab-link" data-module="hotcounts">Hot Counts</button>
+    <button class="tab-link" data-module="orders">Orders</button>
+    <button class="tab-link" data-module="import">Import / Export</button>
+  </nav>
+
+  <main id="app-content">
+    <p>Loading module...</p>
+  </main>
+
+  <script type="module" src="scripts/modules/moduleSystem.js"></script>
+  <footer style="text-align:center; font-size:0.8rem; padding:1rem; color:#666;">
+    <span id="version-info">Loading version...</span>
+  </footer>
+  <script>
+    fetch("version.json")
+      .then(res => res.json())
+      .then(data => {
+        const ts = new Date(data.build).toLocaleString();
+        document.getElementById("version-info").textContent =
+          `Version ${data.version} — Last Updated: ${ts}`;
+      })
+      .catch(() => {
+        document.getElementById("version-info").textContent = "Version info unavailable";
+      });
+  </script>
+</body>
+</html>

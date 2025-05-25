@@ -1,0 +1,101 @@
+:root {
+  --primary-color: #1A1A1A;
+  --accent-color: #C8B560;
+  --background-color: #f5f5f5;
+  --header-bg: #0B1F3A;
+  --stat-bg: #FFFFFF;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--background-color);
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: var(--header-bg);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.header-logo {
+  height: 70px;
+  width: auto;
+  opacity: 0;
+  animation-fill-mode: both;
+}
+
+@keyframes logoEntranceLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes logoEntranceRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.left-logo {
+  margin-left: 1rem;
+  animation: logoEntranceLeft 1s ease-out forwards;
+}
+
+.right-logo {
+  margin-right: 1rem;
+  animation: logoEntranceRight 1s ease-out forwards;
+}
+
+.tab-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.tab-link {
+  padding: 0.5rem 1rem;
+  background: var(--header-bg);
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tab-link:hover {
+  background: #154c70;
+}
+
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-around;
+  padding: 2rem;
+}
+
+.stat-box {
+  background: var(--stat-bg);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  width: 200px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .header-logo {
+    height: 50px !important;
+    margin: 0;
+  }
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+}

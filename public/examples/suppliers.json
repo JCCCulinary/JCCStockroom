@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "lastModified": "2025-05-22T18:59:40.460558Z",
+  "suppliers": [
+    {
+      "name": "US Foods",
+      "contact": "rep@usfoods.com"
+    },
+    {
+      "name": "Sysco",
+      "contact": "sales@sysco.com"
+    }
+  ]
+}

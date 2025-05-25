@@ -1,0 +1,20 @@
+# Firebase safe ignore template
+
+# Ignore everything in node_modules
+node_modules/
+
+# Ignore source maps
+*.map
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Allow everything else
+!scripts/
+!scripts/**/*.js
+!styles/
+!styles/**/*.css
+!*.html
+!*.js
+!*.css

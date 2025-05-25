@@ -1,0 +1,66 @@
+<!-- templates/item-info-page.html -->
+<div class="item-info-form">
+  <h2>Item Info</h2>
+  <form id="item-form">
+    <!-- Product Info Section -->
+    <fieldset>
+      <legend>Product Info</legend>
+      <label>Item Name: <input type="text" id="item-name" required></label>
+      <label>Unit Type:
+        <select id="unit-type">
+          <option value="LB">LB</option>
+          <option value="OZ">OZ</option>
+          <option value="GAL">GAL</option>
+          <option value="#10 CAN">#10 CAN</option>
+          <option value="CS">CS</option>
+          <option value="EA">EA</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" id="unit-type-other" placeholder="Specify unit type..." style="display: none;">
+      </label>
+      <label>Unit Cost: <input type="text" id="unit-cost" required></label>
+      <label>For Event?: <input type="checkbox" id="for-event"></label>
+      <label>PAR: <input type="text" id="par"></label>
+      <label>On Hand: <input type="text" id="on-hand"></label>
+    </fieldset>
+    <!-- Vendor Info Section -->
+    <fieldset>
+      <legend>Vendor Info</legend>
+      <label>Vendor Name: <input type="text" id="vendor-name"></label>
+      <label>Product ID: <input type="text" id="product-id"></label>
+    </fieldset>
+    <!-- Location Section -->
+    <fieldset>
+      <legend>Location</legend>
+      <label>Location:
+        <select id="location">
+          <option value="Cooler">Cooler</option>
+          <option value="Freezer">Freezer</option>
+          <option value="Dry Storage">Dry Storage</option>
+          <option value="Pool">Pool</option>
+          <option value="Kitchen">Kitchen</option>
+          <option value="Men's Lounge">Men's Lounge</option>
+          <option value="Bar">Bar</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" id="location-other" placeholder="Specify location..." style="display: none;">
+      </label>
+      <label>Area: <input type="text" id="area"></label>
+    </fieldset>
+    <!-- Notes Section -->
+    <fieldset>
+      <legend>Notes</legend>
+      <textarea id="notes" rows="4" placeholder="Enter any relevant notes here..."></textarea>
+    </fieldset>
+    <!-- Last Modified Section -->
+    <fieldset>
+      <legend>Last Modified</legend>
+      <p id="last-modified">(auto-generated)</p>
+    </fieldset>
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <button type="submit" id="save-button">Save</button>
+      <button type="button" id="cancel-button">Cancel</button>
+    </div>
+  </form>
+</div>

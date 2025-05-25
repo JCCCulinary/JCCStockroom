@@ -1,0 +1,41 @@
+
+<!-- templates/inventory.html -->
+<div class="inventory-module">
+  <div class="inventory-header">
+    <h2>Inventory</h2>
+    <div class="inventory-controls">
+      <input type="text" id="search" placeholder="Search items...">
+      <select id="filter-location">
+        <option value="">All Locations</option>
+        <option value="Cooler">Cooler</option>
+        <option value="Freezer">Freezer</option>
+        <option value="Dry Storage">Dry Storage</option>
+        <option value="Pool">Pool</option>
+        <option value="Kitchen">Kitchen</option>
+        <option value="Men's Lounge">Men's Lounge</option>
+        <option value="Bar">Bar</option>
+        <option value="Other">Other</option>
+      </select>
+      <select id="filter-event">
+        <option value="">All Items</option>
+        <option value="true">For Event</option>
+        <option value="false">Not for Event</option>
+      </select>
+      <button id="add-item-button">Add Item</button>
+    </div>
+  </div>
+  <table id="inventory-table">
+    <thead>
+      <tr>
+        <th>Item Name</th>
+        <th>Location</th>
+        <th>Area</th>
+        <th>For Event?</th>
+        <th>PAR</th>
+        <th>On Hand</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody id="inventory-table-body"></tbody>
+  </table>
+</div>

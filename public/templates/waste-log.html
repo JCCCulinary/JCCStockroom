@@ -1,0 +1,55 @@
+<!-- templates/waste-log.html -->
+<div class="waste-log-module">
+  <h2>Waste Log</h2>
+
+  <!-- KPI Summary -->
+  <div class="kpi-row">
+    <div class="kpi-box">
+      <h3>Total Waste</h3>
+      <p>Day: <span id="waste-total-day">$0.00</span></p>
+      <p>Week: <span id="waste-total-week">$0.00</span></p>
+      <p>Month: <span id="waste-total-month">$0.00</span></p>
+    </div>
+    <div class="kpi-box">
+      <h3>Most Wasted Item</h3>
+      <ol id="top-wasted-items">
+        <li>1. —</li>
+        <li>2. —</li>
+        <li>3. —</li>
+      </ol>
+    </div>
+    <div class="kpi-box">
+      <h3>Most Waste Category</h3>
+      <ol id="top-waste-categories">
+        <li>1. —</li>
+        <li>2. —</li>
+        <li>3. —</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="waste-log-controls">
+    <button id="add-waste-button">Add Waste Entry</button>
+    <input type="text" id="search-waste-log" placeholder="Search waste log...">
+  </div>
+
+  <!-- Waste Table -->
+  <table id="waste-log-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Item Name</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Estimated Cost</th>
+        <th>Reason</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody id="waste-log-body">
+      <!-- Rows populated by waste-log.js -->
+    </tbody>
+  </table>
+</div>

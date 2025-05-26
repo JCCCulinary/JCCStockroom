@@ -1,66 +1,88 @@
 <!-- templates/item-info-page.html -->
 <div class="item-info-form">
-  <h2>Item Info</h2>
-  <form id="item-form">
-    <!-- Product Info Section -->
-    <fieldset>
-      <legend>Product Info</legend>
-      <label>Item Name: <input type="text" id="item-name" required></label>
-      <label>Unit Type:
-        <select id="unit-type">
-          <option value="LB">LB</option>
-          <option value="OZ">OZ</option>
-          <option value="GAL">GAL</option>
-          <option value="#10 CAN">#10 CAN</option>
-          <option value="CS">CS</option>
-          <option value="EA">EA</option>
-          <option value="Other">Other</option>
-        </select>
-        <input type="text" id="unit-type-other" placeholder="Specify unit type..." style="display: none;">
-      </label>
-      <label>Unit Cost: <input type="text" id="unit-cost" required></label>
-      <label>For Event?: <input type="checkbox" id="for-event"></label>
-      <label>PAR: <input type="text" id="par"></label>
-      <label>On Hand: <input type="text" id="on-hand"></label>
-    </fieldset>
-    <!-- Vendor Info Section -->
-    <fieldset>
-      <legend>Vendor Info</legend>
-      <label>Vendor Name: <input type="text" id="vendor-name"></label>
-      <label>Product ID: <input type="text" id="product-id"></label>
-    </fieldset>
-    <!-- Location Section -->
-    <fieldset>
-      <legend>Location</legend>
-      <label>Location:
-        <select id="location">
-          <option value="Cooler">Cooler</option>
-          <option value="Freezer">Freezer</option>
-          <option value="Dry Storage">Dry Storage</option>
-          <option value="Pool">Pool</option>
-          <option value="Kitchen">Kitchen</option>
-          <option value="Men's Lounge">Men's Lounge</option>
-          <option value="Bar">Bar</option>
-          <option value="Other">Other</option>
-        </select>
-        <input type="text" id="location-other" placeholder="Specify location..." style="display: none;">
-      </label>
-      <label>Area: <input type="text" id="area"></label>
-    </fieldset>
-    <!-- Notes Section -->
-    <fieldset>
-      <legend>Notes</legend>
-      <textarea id="notes" rows="4" placeholder="Enter any relevant notes here..."></textarea>
-    </fieldset>
-    <!-- Last Modified Section -->
-    <fieldset>
-      <legend>Last Modified</legend>
-      <p id="last-modified">(auto-generated)</p>
-    </fieldset>
-    <!-- Action Buttons -->
-    <div class="form-actions">
-      <button type="submit" id="save-button">Save</button>
-      <button type="button" id="cancel-button">Cancel</button>
-    </div>
-  </form>
+<h2>Item Info</h2>
+<form id="item-form">
+<!-- Product Info Section -->
+
+<fieldset>
+  <legend>Product Info</legend>
+  <label>Item Name: <input type="text" id="item-name" name="name" required></label>
+  <label>PAR: <input type="number" id="par" name="par" maxlength="3" max="999" pattern="[0-9]*" style="width: 4ch;"></label>
+  <label>On Hand: <input type="number" id="on-hand" name="onHand" maxlength="3" max="999" pattern="[0-9]*" style="width: 4ch;"></label>
+</fieldset>
+
+<fieldset>
+  <legend>Case Breakdown</legend>
+  <label>Units per Case: <input type="number" id="caseQuantity" name="caseQuantity" class="form-control"></label>
+  <label>Qty per Unit: <input type="number" id="unitPerCase" name="unitPerCase" class="form-control"></label>
+  <label>Case Unit Type:
+    <select id="caseUnit" name="caseUnit" class="form-control">
+      <option value="LB">LB</option>
+      <option value="OZ">OZ</option>
+      <option value="GAL">GAL</option>
+      <option value="EA">EA</option>
+      <option value="CS">CS</option>
+      <option value="#10 CAN">#10 CAN</option>
+      <option value="Other">Other</option>
+    </select>
+  </label>
+  <label>Cost per Case: <input type="text" id="caseCost" name="caseCost"></label>
+</fieldset>
+
+<fieldset>
+  <legend>Metric Tracking</legend>
+  <label>Unit Cost: <input type="text" id="unitCost" name="unitCost" readonly></label>
+  <label>Default Waste Entry Unit:
+    <select id="wasteEntryUnit" name="wasteEntryUnit" class="form-control">
+      <option value="OZ">OZ</option>
+      <option value="LB">LB</option>
+      <option value="GAL">GAL</option>
+      <option value="EA">EA</option>
+      <option value="CS">CS</option>
+      <option value="#10 CAN">#10 CAN</option>
+      <option value="Other">Other</option>
+    </select>
+  </label>
+  <label>For Event?: <input type="checkbox" id="for-event" name="forEvent"></label>
+</fieldset>
+
+<!-- Vendor Info Section -->
+<fieldset>
+<legend>Vendor Info</legend>
+<label>Vendor Name: <input id="vendor-name" name="vendorName" type="text"/></label>
+<label>Product ID: <input id="product-id" name="productId" type="text"/></label>
+</fieldset>
+<!-- Location Section -->
+<fieldset>
+<legend>Location</legend>
+<label>Location:
+        <select id="location" name="location">
+<option value="Cooler">Cooler</option>
+<option value="Freezer">Freezer</option>
+<option value="Dry Storage">Dry Storage</option>
+<option value="Pool">Pool</option>
+<option value="Kitchen">Kitchen</option>
+<option value="Men's Lounge">Men's Lounge</option>
+<option value="Bar">Bar</option>
+<option value="Other">Other</option>
+</select>
+<input id="location-other" name="location" placeholder="Specify location..." style="display: none;" type="text"/>
+</label>
+<label>Area: <input id="area" name="area" type="text"/></label>
+</fieldset>
+<!-- Notes Section -->
+<fieldset>
+<legend>Notes</legend>
+<textarea id="notes" name="notes" placeholder="Enter any relevant notes here..." rows="4"></textarea>
+</fieldset>
+<!-- Last Modified Section -->
+<fieldset>
+<legend>Last Modified</legend>
+<p id="last-modified">(auto-generated)</p>
+</fieldset>
+<!-- Action Buttons -->
+<div class="form-actions">
+<button id="save-button" type="submit">Save</button>
+<button id="cancel-button" type="button">Cancel</button>
 </div>
+</form>

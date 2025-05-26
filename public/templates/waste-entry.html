@@ -1,0 +1,53 @@
+<!-- templates/waste-entry.html -->
+<div class="waste-entry-form">
+  <h2>Waste Entry</h2>
+
+  <form id="waste-form">
+    <fieldset>
+      <legend>Item & Quantity</legend>
+      <label>Item:
+        <select id="waste-item" required></select>
+      </label>
+      <label>Quantity: <input type="number" step="any" id="waste-quantity" required></label>
+      <label>Unit:
+        <select id="waste-unit" required>
+          <option value="LB">LB</option>
+          <option value="OZ">OZ</option>
+          <option value="GAL">GAL</option>
+          <option value="#10 CAN">#10 CAN</option>
+          <option value="CS">CS</option>
+          <option value="EA">EA</option>
+          <option value="Other">Other</option>
+        </select>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Cost & Reason</legend>
+      <label>Estimated Cost: <input type="text" id="waste-cost" readonly></label>
+      <label>Reason:
+        <select id="waste-reason" required>
+          <option value="Overproduction">Overproduction</option>
+          <option value="Spoilage">Spoilage</option>
+          <option value="Damaged">Damaged</option>
+          <option value="Returned">Returned</option>
+          <option value="Misfire">Misfire</option>
+          <option value="Other">Other</option>
+        </select>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Details</legend>
+      <label>Date: <input type="date" id="waste-date" required></label>
+      <label>Notes:
+        <textarea id="waste-notes" rows="4" placeholder="Optional notes..."></textarea>
+      </label>
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" id="save-waste">Save</button>
+      <button type="button" id="cancel-waste">Cancel</button>
+    </div>
+  </form>
+</div>

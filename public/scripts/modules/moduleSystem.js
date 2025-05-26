@@ -1,27 +1,43 @@
+class ModuleSystem {
+  constructor() {
+    this.contentContainer = document.getElementById('app-content');
+    this.navLinks = document.querySelectorAll('.tab-link');
+    this.currentModule = null;
+    this.initNavigation();
+  }
 
-import { StorageController } from "../storage/storageController.js";
-import { loadDashboard } from "./dashboard.js";
-import { loadInventory } from "./inventory.js";
-
-document.addEventListener("DOMContentLoaded", () => {
-  const tabLinks = document.querySelectorAll(".tab-link");
-  const content = document.getElementById("app-content");
-
-  tabLinks.forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const module = btn.dataset.module;
-      if (module === "dashboard") {
-        const html = await fetch("./templates/dashboard.html").then(res => res.text());
-        content.innerHTML = html;
-        loadDashboard();
-      } else if (module === "inventory") {
-        loadInventory(); // Let inventory.js handle loading and initializing
-      } else {
-        content.innerHTML = "<p>Module not found.</p>";
-      }
+  initNavigation() {
+    this.navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const moduleId = link.getAttribute('data-module');
+        this.loadModule(moduleId);
+      });
     });
-  });
+  }
 
-  // Load default view
-  document.querySelector(".tab-link[data-module='dashboard']")?.click();
+  async loadModule(moduleId) {
+    try {
+      const templateResponse = await fetch(`templates/${moduleId}.html`);
+      const html = await templateResponse.text();
+      this.contentContainer.innerHTML = html;
+
+      const module = await import(`./${moduleId}.js`);
+      if (module.default && typeof module.default.initialize === 'function') {
+        module.default.initialize();
+      } else {
+        console.warn(`Module ${moduleId} does not export a default initialize() function.`);
+      }
+    } catch (error) {
+      console.error(`Error loading module '${moduleId}':`, error);
+      this.contentContainer.innerHTML = `<p style="color: red;">Failed to load module: ${moduleId}</p>`;
+    }
+  }
+}
+
+window.moduleSystem = new ModuleSystem();
+
+// Automatically load dashboard on page load
+window.addEventListener("DOMContentLoaded", () => {
+  moduleSystem.loadModule("dashboard");
 });

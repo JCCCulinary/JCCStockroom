@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
-  "build": "2025-05-25T05:48:30.787329",
-  "commit": "Live inventory value on dashboard, finalized responsive logos, mobile layout fixes, and polish"
+  "version": "2.0.0",
+  "build": "2025-05-26 05:15:01",
+  "commit": "Major update: migrated all modules to Firestore, added KPI dashboard, removed legacy storage."
 }

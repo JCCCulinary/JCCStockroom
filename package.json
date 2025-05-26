@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "firebase-functions": "^6.3.2"
+  },
+  "scripts": {
+    "start:dev": "firebase emulators:start --only hosting,firestore,functions,storage"
   }
 }

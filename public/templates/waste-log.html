@@ -1,7 +1,7 @@
 <!-- templates/waste-log.html -->
 <div class="waste-log-module">
   <h2>Waste Log</h2>
-
+  
   <!-- KPI Summary -->
   <div class="kpi-row">
     <div class="kpi-box">
@@ -11,29 +11,29 @@
       <p>Month: <span id="waste-total-month">$0.00</span></p>
     </div>
     <div class="kpi-box">
-      <h3>Most Wasted Item</h3>
+      <h3>Most Wasted Items</h3>
       <ol id="top-wasted-items">
-        <li>1. —</li>
-        <li>2. —</li>
-        <li>3. —</li>
+        <li>1. ---</li>
+        <li>2. ---</li>
+        <li>3. ---</li>
       </ol>
     </div>
     <div class="kpi-box">
-      <h3>Most Waste Category</h3>
+      <h3>Top Waste Categories</h3>
       <ol id="top-waste-categories">
-        <li>1. —</li>
-        <li>2. —</li>
-        <li>3. —</li>
+        <li>1. ---</li>
+        <li>2. ---</li>
+        <li>3. ---</li>
       </ol>
     </div>
   </div>
-
+  
   <!-- Controls -->
   <div class="waste-log-controls">
     <button id="add-waste-button">Add Waste Entry</button>
     <input type="text" id="search-waste-log" placeholder="Search waste log...">
   </div>
-
+  
   <!-- Waste Table -->
   <table id="waste-log-table">
     <thead>
@@ -41,8 +41,11 @@
         <th>Date</th>
         <th>Item Name</th>
         <th>Quantity</th>
+        <th>Converted Qty</th>
+        <th>% of Case</th>
+        <th>Est. Cost</th>
         <th>Unit</th>
-        <th>Estimated Cost</th>
+        <th>Total Cost</th>
         <th>Reason</th>
         <th>Edit</th>
         <th>Delete</th>

@@ -1,42 +1,159 @@
-
-<!-- templates/inventory.html -->
+<!-- templates/inventory.html - Enhanced Phase 1B (Clean Version) -->
 <div class="inventory-module">
   <div class="inventory-header">
-    <h2>Inventory</h2>
+    <h2>Inventory Management</h2>
     <div class="inventory-controls">
-      <input type="text" id="search" placeholder="Search items...">
-      <select id="filter-location">
-        <option value="">All Locations</option>
-        <option value="Cooler">Cooler</option>
-        <option value="Freezer">Freezer</option>
-        <option value="Dry Storage">Dry Storage</option>
-        <option value="Pool">Pool</option>
-        <option value="Kitchen">Kitchen</option>
-        <option value="Men's Lounge">Men's Lounge</option>
-        <option value="Bar">Bar</option>
-        <option value="Other">Other</option>
-      </select>
-      <select id="filter-event">
-        <option value="">All Items</option>
-        <option value="true">For Event</option>
-        <option value="false">Not for Event</option>
-      </select>
-      <button id="add-item-button">Add Item</button>
+      <!-- Search and Filters Row -->
+      <div class="filter-row">
+        <input type="text" id="search" placeholder="Search items, vendors, tags..." class="search-input">
+        
+        <select id="filter-location" class="filter-select">
+          <option value="">All Locations</option>
+          <option value="Cooler">Cooler</option>
+          <option value="Freezer">Freezer</option>
+          <option value="Dry Storage">Dry Storage</option>
+          <option value="Pool">Pool</option>
+          <option value="Kitchen">Kitchen</option>
+          <option value="Men's Lounge">Men's Lounge</option>
+          <option value="Bar">Bar</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <select id="filter-category" class="filter-select">
+          <option value="">All Categories</option>
+          <option value="Protein">Protein</option>
+          <option value="Dairy">Dairy</option>
+          <option value="Produce">Produce</option>
+          <option value="Dry Goods">Dry Goods</option>
+          <option value="Beverages">Beverages</option>
+          <option value="Frozen">Frozen</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <select id="filter-event" class="filter-select">
+          <option value="">All Items</option>
+          <option value="true">For Event</option>
+          <option value="false">Not for Event</option>
+        </select>
+
+        <select id="filter-status" class="filter-select">
+          <option value="">All Status</option>
+          <option value="good">Good Stock</option>
+          <option value="low">Low Stock</option>
+          <option value="out">Out of Stock</option>
+          <option value="expiring">Expiring Soon</option>
+        </select>
+      </div>
+
+      <!-- Quick Filter Buttons -->
+      <div class="quick-filters">
+        <button class="quick-filter-btn" data-filter="low-stock">Low Stock</button>
+        <button class="quick-filter-btn" data-filter="out-of-stock">Out of Stock</button>
+        <button class="quick-filter-btn" data-filter="expiring">Expiring Soon</button>
+        <button class="quick-filter-btn" data-filter="for-event">Event Items</button>
+        <button class="quick-filter-btn active" data-filter="all">Show All</button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button id="add-item-button" class="btn btn-primary">
+          <span class="btn-icon">+</span>Add Item
+        </button>
+        <button id="bulk-actions-btn" class="btn btn-secondary" style="display: none;">
+          Bulk Actions
+        </button>
+      </div>
     </div>
   </div>
-  <table id="inventory-table">
-    <thead>
-      <tr>
-        <th>Item Name</th>
-        <th>Location</th>
-        <th>Area</th>
-        <th>For Event?</th>
-        <th>PAR</th>
-        <th>On Hand</th>
-        <th>Edit</th>
-        <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody id="inventory-table-body"></tbody>
-  </table>
+
+  <!-- Inventory Summary Stats -->
+  <div class="inventory-stats">
+    <div class="stat-card">
+      <span class="stat-label">Total Items</span>
+      <span id="total-items" class="stat-value">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Total Value</span>
+      <span id="total-value" class="stat-value">$0.00</span>
+    </div>
+    <div class="stat-card low-stock">
+      <span class="stat-label">Low Stock</span>
+      <span id="low-stock-count" class="stat-value">0</span>
+    </div>
+    <div class="stat-card out-of-stock">
+      <span class="stat-label">Out of Stock</span>
+      <span id="out-stock-count" class="stat-value">0</span>
+    </div>
+  </div>
+
+  <!-- Enhanced Inventory Table -->
+  <div class="table-container">
+    <table id="inventory-table" class="inventory-table table">
+      <thead>
+        <tr>
+          <th class="bulk-select">
+            <input type="checkbox" id="select-all" title="Select All">
+          </th>
+          <th class="sortable" data-sort="name">
+            Item Name <span class="sort-indicator"></span>
+          </th>
+          <th class="sortable" data-sort="category">
+            Category <span class="sort-indicator"></span>
+          </th>
+          <th class="sortable" data-sort="location">
+            Location <span class="sort-indicator"></span>
+          </th>
+          <th class="sortable" data-sort="primaryVendor">
+            Vendor <span class="sort-indicator"></span>
+          </th>
+          <th class="text-center">For Event?</th>
+          <th class="sortable text-center" data-sort="par">
+            PAR <span class="sort-indicator"></span>
+          </th>
+          <th class="sortable text-center" data-sort="onHand">
+            On Hand <span class="sort-indicator"></span>
+          </th>
+          <th class="text-center">Status</th>
+          <th class="sortable text-right" data-sort="unitCost">
+            Unit Cost <span class="sort-indicator"></span>
+          </th>
+          <th class="text-right">Total Value</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="inventory-table-body">
+        <!-- Rows populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bulk Actions Panel (Hidden by default) -->
+  <div id="bulk-actions-panel" class="bulk-actions-panel" style="display: none;">
+    <div class="bulk-actions-content">
+      <span class="bulk-count">0 items selected</span>
+      <div class="bulk-buttons">
+        <button class="btn btn-secondary" id="bulk-edit-location">Change Location</button>
+        <button class="btn btn-secondary" id="bulk-edit-category">Change Category</button>
+        <button class="btn btn-secondary" id="bulk-toggle-event">Toggle Event Status</button>
+        <button class="btn btn-danger" id="bulk-delete">Delete Selected</button>
+        <button class="btn btn-light" id="bulk-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loading-indicator" class="loading-indicator" style="display: none;">
+    <div class="spinner"></div>
+    <span>Loading inventory...</span>
+  </div>
+
+  <!-- No Results Message -->
+  <div id="no-results" class="no-results" style="display: none;">
+    <div class="no-results-content">
+      <div class="empty-state-icon">📦</div>
+      <h3>No items found</h3>
+      <p>Try adjusting your search or filter criteria</p>
+      <button class="btn btn-primary" id="clear-filters">Clear All Filters</button>
+    </div>
+  </div>
 </div>

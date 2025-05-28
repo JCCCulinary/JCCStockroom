@@ -22,16 +22,19 @@ function renderWasteLogTable() {
 
   wasteLogEntries.forEach(entry => {
     const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${entry.date}</td>
-      <td>${entry.item}</td>
-      <td>${entry.quantity}</td><td>${entry.convertedQuantity ?? "-"}</td><td>${entry.fractionOfCase ? entry.fractionOfCase + "%" : "-"}</td><td>${entry.estimatedCost ? "$" + entry.estimatedCost : "-"}</td>
-      <td>${entry.unit}</td>
-      <td>$${entry.estimatedCost?.toFixed(2) || "0.00"}</td>
-      <td>${entry.reason}</td>
-      <td><button class="btn-edit" data-id="${entry.id}">Edit</button></td>
-      <td><button class="btn-delete" data-id="${entry.id}">Delete</button></td>
-    `;
+    row.innerHTML = [
+      `<td>${entry.date}</td>`,
+      `<td>${entry.item}</td>`,
+      `<td>${entry.quantity}</td>`,
+      `<td>${entry.convertedQuantity ?? "-"}</td>`,
+      `<td>${entry.fractionOfCase ? entry.fractionOfCase + "%" : "-"}</td>`,
+      `<td>${entry.estimatedCost ? "$" + entry.estimatedCost : "-"}</td>`,
+      `<td>${entry.unit}</td>`,
+      `<td>$${entry.estimatedCost?.toFixed(2) || "0.00"}</td>`,
+      `<td>${entry.reason}</td>`,
+      `<td><button class="btn-edit" data-id="${entry.id}">Edit</button></td>`,
+      `<td><button class="btn-delete" data-id="${entry.id}">Delete</button></td>`
+    ].join("");
     tableBody.appendChild(row);
   });
 

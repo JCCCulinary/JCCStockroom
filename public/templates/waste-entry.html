@@ -1,52 +1,64 @@
 <!-- templates/waste-entry.html -->
-<div class="waste-entry-form">
+<div class="waste-entry-module">
   <h2>Waste Entry</h2>
-
+  
   <form id="waste-form">
     <fieldset>
-      <legend>Item & Quantity</legend>
-      <label>Item:
-        <select id="waste-item" required></select>
+      <legend>Waste Details</legend>
+      
+      <label>Date: 
+        <input type="date" id="waste-date" name="date" required>
       </label>
-      <label>Quantity: <input type="number" step="any" id="waste-quantity" required></label>
-      <label>Unit:
-        <select id="waste-unit" required>
+      
+      <label>Item: 
+        <select id="waste-item" name="item" required>
+          <option value="">Select an item...</option>
+        </select>
+      </label>
+      
+      <label>Quantity: 
+        <input type="number" id="waste-quantity" name="quantity" step="0.01" min="0" required>
+      </label>
+      
+      <label>Unit: 
+        <select id="waste-unit" name="unit" required>
           <option value="LB">LB</option>
           <option value="OZ">OZ</option>
           <option value="GAL">GAL</option>
-          <option value="#10 CAN">#10 CAN</option>
-          <option value="CS">CS</option>
+          <option value="QT">QT</option>
+          <option value="PT">PT</option>
+          <option value="FL OZ">FL OZ</option>
           <option value="EA">EA</option>
+          <option value="CS">CS</option>
           <option value="Other">Other</option>
         </select>
       </label>
-    </fieldset>
-
-    <fieldset>
-      <legend>Cost & Reason</legend>
-      <label>Estimated Cost: <input type="text" id="waste-cost" readonly></label>
-      <label>Reason:
-        <select id="waste-reason" required>
-          <option value="Overproduction">Overproduction</option>
+      
+      <label>Estimated Cost: 
+        <input type="text" id="waste-cost" name="estimatedCost" readonly>
+      </label>
+      
+      <label>Reason: 
+        <select id="waste-reason" name="reason" required>
+          <option value="">Select reason...</option>
           <option value="Spoilage">Spoilage</option>
-          <option value="Damaged">Damaged</option>
-          <option value="Returned">Returned</option>
-          <option value="Misfire">Misfire</option>
+          <option value="Prep Error">Prep Error</option>
+          <option value="Overcooking">Overcooking</option>
+          <option value="Customer Return">Customer Return</option>
+          <option value="Contamination">Contamination</option>
+          <option value="Expiration">Expiration</option>
+          <option value="Damage">Damage</option>
           <option value="Other">Other</option>
         </select>
       </label>
-    </fieldset>
-
-    <fieldset>
-      <legend>Details</legend>
-      <label>Date: <input type="date" id="waste-date" required></label>
-      <label>Notes:
-        <textarea id="waste-notes" rows="4" placeholder="Optional notes..."></textarea>
+      
+      <label>Notes: 
+        <textarea id="waste-notes" name="notes" rows="3" placeholder="Additional details..."></textarea>
       </label>
     </fieldset>
-
+    
     <div class="form-actions">
-      <button type="submit" id="save-waste">Save</button>
+      <button type="submit">Save Waste Entry</button>
       <button type="button" id="cancel-waste">Cancel</button>
     </div>
   </form>

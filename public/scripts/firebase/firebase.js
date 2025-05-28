@@ -1,14 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  setDoc,
-  doc,
-  deleteDoc
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { 
+  getFirestore, 
+  collection, 
+  getDocs, 
+  setDoc, 
+  doc, 
+  deleteDoc,
+  writeBatch
+} from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA_FZ4R_rI8NkFIGXRpJfXw5g1ab73fc9Q",
@@ -20,8 +19,7 @@ const firebaseConfig = {
   measurementId: "G-LEQRZ0SF6T"
 };
 
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export { db, collection, getDocs, setDoc, doc, deleteDoc };
+export { db, collection, getDocs, setDoc, doc, deleteDoc, writeBatch };

@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
-  "build": "2025-05-26 05:15:01",
-  "commit": "Major update: migrated all modules to Firestore, added KPI dashboard, removed legacy storage."
+  "version": "2.1.0",
+  "build": "2025-05-28 10:30:00",
+  "commit": "Minor update: Waste Log module finalized, unit conversion system added, full Firebase migration completed, responsive design improvements."
 }

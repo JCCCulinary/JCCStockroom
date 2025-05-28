@@ -5,7 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>JCC Stockroom</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  
+  <!-- Enhanced CSS Files - Load in order -->
   <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <link rel="stylesheet" href="styles/modules.css" />
+  <link rel="stylesheet" href="styles/responsive.css" />
 </head>
 <body>
   <header>
@@ -14,22 +19,40 @@
   </header>
 
   <nav class="tab-bar">
-    <button class="tab-link" data-module="dashboard">Dashboard</button>
-    <button class="tab-link" data-module="inventory">Inventory</button>
-    <button class="tab-link" data-module="hotcounts">Hot Counts</button>
-    <button class="tab-link" data-module="orders">Orders</button>
-    <button class="tab-link" data-module="import">Import / Export</button>
-    <button class="tab-link" data-module="waste-log">Waste Log</button>
+    <button class="tab-link" data-module="dashboard">
+      <span>📊</span> Dashboard
+    </button>
+    <button class="tab-link" data-module="inventory">
+      <span>📦</span> Inventory
+    </button>
+    <button class="tab-link" data-module="hotcounts">
+      <span>🔢</span> Hot Counts
+    </button>
+    <button class="tab-link" data-module="orders">
+      <span>📋</span> Orders
+    </button>
+    <button class="tab-link" data-module="import">
+      <span>📥</span> Import / Export
+    </button>
+    <button class="tab-link" data-module="waste-log">
+      <span>🗑️</span> Waste Log
+    </button>
   </nav>
 
   <main id="app-content">
-    <p>Loading module...</p>
+    <div class="module-loading">
+      <div class="spinner"></div>
+      <h3>Loading Application</h3>
+      <p>Please wait while the system initializes...</p>
+    </div>
   </main>
 
   <script type="module" src="scripts/modules/moduleSystem.js"></script>
+  
   <footer style="text-align:center; font-size:0.8rem; padding:1rem; color:#666;">
     <span id="version-info">Loading version...</span>
   </footer>
+  
   <script>
     fetch("version.json")
       .then(res => res.json())

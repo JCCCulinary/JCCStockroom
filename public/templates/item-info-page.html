@@ -1,88 +1,441 @@
-<!-- templates/item-info-page.html -->
+<!-- templates/item-info-page.html - Enhanced Phase 1B (Clean Version) -->
 <div class="item-info-form">
-<h2>Item Info</h2>
-<form id="item-form">
-<!-- Product Info Section -->
+  <div class="form-header">
+    <h2 id="form-title">Add New Item</h2>
+    <div class="form-breadcrumb">
+      <span>Inventory</span> > <span id="breadcrumb-action">Add Item</span>
+    </div>
+  </div>
 
-<fieldset>
-  <legend>Product Info</legend>
-  <label>Item Name: <input type="text" id="item-name" name="name" required></label>
-  <label>PAR: <input type="number" id="par" name="par" maxlength="3" max="999" pattern="[0-9]*" style="width: 4ch;"></label>
-  <label>On Hand: <input type="number" id="on-hand" name="onHand" maxlength="3" max="999" pattern="[0-9]*" style="width: 4ch;"></label>
-</fieldset>
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button class="tab-btn active" data-tab="basic-info">
+      <span class="tab-icon">📦</span>
+      Basic Info
+    </button>
+    <button class="tab-btn" data-tab="purchasing">
+      <span class="tab-icon">💰</span>
+      Purchasing
+    </button>
+    <button class="tab-btn" data-tab="inventory">
+      <span class="tab-icon">📊</span>
+      Inventory
+    </button>
+    <button class="tab-btn" data-tab="tracking">
+      <span class="tab-icon">🔍</span>
+      Tracking
+    </button>
+    <button class="tab-btn" data-tab="history">
+      <span class="tab-icon">📈</span>
+      History
+    </button>
+  </div>
 
-<fieldset>
-  <legend>Case Breakdown</legend>
-  <label>Units per Case: <input type="number" id="caseQuantity" name="caseQuantity" class="form-control"></label>
-  <label>Qty per Unit: <input type="number" id="unitPerCase" name="unitPerCase" class="form-control"></label>
-  <label>Case Unit Type:
-    <select id="caseUnit" name="caseUnit" class="form-control">
-      <option value="LB">LB</option>
-      <option value="OZ">OZ</option>
-      <option value="GAL">GAL</option>
-      <option value="EA">EA</option>
-      <option value="CS">CS</option>
-      <option value="#10 CAN">#10 CAN</option>
-      <option value="Other">Other</option>
-    </select>
-  </label>
-  <label>Cost per Case: <input type="text" id="caseCost" name="caseCost"></label>
-</fieldset>
+  <form id="item-form">
+    <!-- Basic Info Tab -->
+    <div class="tab-content active" id="basic-info">
+      <div class="tab-section">
+        <h3>Basic Information</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-name">Item Name <span class="required">*</span></label>
+            <input type="text" id="item-name" name="name" required class="form-control">
+            <small class="form-help">Enter the full name of the item</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" class="form-control">
+              <option value="">Select category...</option>
+              <option value="Protein">Protein</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Produce">Produce</option>
+              <option value="Dry Goods">Dry Goods</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Frozen">Frozen</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
 
-<fieldset>
-  <legend>Metric Tracking</legend>
-  <label>Unit Cost: <input type="text" id="unitCost" name="unitCost" readonly></label>
-  <label>Default Waste Entry Unit:
-    <select id="wasteEntryUnit" name="wasteEntryUnit" class="form-control">
-      <option value="OZ">OZ</option>
-      <option value="LB">LB</option>
-      <option value="GAL">GAL</option>
-      <option value="EA">EA</option>
-      <option value="CS">CS</option>
-      <option value="#10 CAN">#10 CAN</option>
-      <option value="Other">Other</option>
-    </select>
-  </label>
-  <label>For Event?: <input type="checkbox" id="for-event" name="forEvent"></label>
-</fieldset>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="subcategory">Subcategory</label>
+            <input type="text" id="subcategory" name="subcategory" class="form-control">
+            <small class="form-help">More specific classification</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="for-event">For Event?</label>
+            <div class="checkbox-wrapper">
+              <input type="checkbox" id="for-event" name="forEvent">
+              <label for="for-event" class="checkbox-label">This item is used for events</label>
+            </div>
+          </div>
+        </div>
 
-<!-- Vendor Info Section -->
-<fieldset>
-<legend>Vendor Info</legend>
-<label>Vendor Name: <input id="vendor-name" name="vendorName" type="text"/></label>
-<label>Product ID: <input id="product-id" name="productId" type="text"/></label>
-</fieldset>
-<!-- Location Section -->
-<fieldset>
-<legend>Location</legend>
-<label>Location:
-        <select id="location" name="location">
-<option value="Cooler">Cooler</option>
-<option value="Freezer">Freezer</option>
-<option value="Dry Storage">Dry Storage</option>
-<option value="Pool">Pool</option>
-<option value="Kitchen">Kitchen</option>
-<option value="Men's Lounge">Men's Lounge</option>
-<option value="Bar">Bar</option>
-<option value="Other">Other</option>
-</select>
-<input id="location-other" name="location" placeholder="Specify location..." style="display: none;" type="text"/>
-</label>
-<label>Area: <input id="area" name="area" type="text"/></label>
-</fieldset>
-<!-- Notes Section -->
-<fieldset>
-<legend>Notes</legend>
-<textarea id="notes" name="notes" placeholder="Enter any relevant notes here..." rows="4"></textarea>
-</fieldset>
-<!-- Last Modified Section -->
-<fieldset>
-<legend>Last Modified</legend>
-<p id="last-modified">(auto-generated)</p>
-</fieldset>
-<!-- Action Buttons -->
-<div class="form-actions">
-<button id="save-button" type="submit">Save</button>
-<button id="cancel-button" type="button">Cancel</button>
+        <div class="form-group">
+          <label for="full-description">Description</label>
+          <textarea id="full-description" name="fullDescription" class="form-control" rows="3" 
+                    placeholder="Detailed description of the item..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-image">Image URL</label>
+            <input type="url" id="item-image" name="itemImage" class="form-control" 
+                   placeholder="https://example.com/image.jpg">
+            <small class="form-help">Link to item photo</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" name="tags" class="form-control" 
+                   placeholder="organic, local, specialty (comma-separated)">
+            <small class="form-help">Comma-separated tags for searching</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="allergen-info">Allergen Information</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="allergens" value="Dairy"> Dairy
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="allergens" value="Eggs"> Eggs
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="allergens" value="Fish"> Fish
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="allergens" value="Shellfish"> Shellfish
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="allergens" value="Tree Nuts"> Tree Nuts
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="allergens" value="Peanuts"> Peanuts
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="allergens" value="Wheat"> Wheat
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="allergens" value="Soy"> Soy
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Purchasing Tab -->
+    <div class="tab-content" id="purchasing">
+      <div class="tab-section">
+        <h3>Vendor & Purchasing Information</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="primary-vendor">Primary Vendor</label>
+            <input type="text" id="primary-vendor" name="primaryVendor" class="form-control">
+            <small class="form-help">Main supplier for this item</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="vendor-sku">Vendor SKU</label>
+            <input type="text" id="vendor-sku" name="vendorSKU" class="form-control">
+            <small class="form-help">Supplier's product code</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="alternate-vendors">Alternate Vendors</label>
+          <textarea id="alternate-vendors" name="alternateVendors" class="form-control" rows="2"
+                    placeholder="Enter alternate vendors, one per line"></textarea>
+          <small class="form-help">Backup suppliers for this item</small>
+        </div>
+
+        <h4>Case Breakdown & Pricing</h4>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="caseQuantity">Units per Case</label>
+            <input type="number" id="caseQuantity" name="caseQuantity" class="form-control" step="0.01">
+          </div>
+          
+          <div class="form-group">
+            <label for="unitPerCase">Qty per Unit</label>
+            <input type="number" id="unitPerCase" name="unitPerCase" class="form-control" step="0.01">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="caseUnit">Case Unit Type</label>
+            <select id="caseUnit" name="caseUnit" class="form-control">
+              <option value="LB">LB (Pounds)</option>
+              <option value="OZ">OZ (Ounces)</option>
+              <option value="GAL">GAL (Gallons)</option>
+              <option value="EA">EA (Each)</option>
+              <option value="CS">CS (Cases)</option>
+              <option value="#10 CAN">#10 CAN</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="caseCost">Cost per Case</label>
+            <input type="number" id="caseCost" name="caseCost" class="form-control" step="0.01" 
+                   placeholder="0.00">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="unitCost">Unit Cost (Auto-calculated)</label>
+            <input type="text" id="unitCost" name="unitCost" class="form-control" readonly>
+            <small class="form-help">Automatically calculated from case cost</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="yield-percentage">Yield Percentage</label>
+            <input type="number" id="yield-percentage" name="yieldPercentage" class="form-control" 
+                   min="0" max="100" value="100">
+            <small class="form-help">Usable portion percentage</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventory Tab -->
+    <div class="tab-content" id="inventory">
+      <div class="tab-section">
+        <h3>Inventory Levels & Location</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="par">PAR Level</label>
+            <input type="number" id="par" name="par" class="form-control" min="0">
+            <small class="form-help">Target inventory level</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="on-hand">Current On Hand</label>
+            <input type="number" id="on-hand" name="onHand" class="form-control" min="0">
+            <small class="form-help">Current stock quantity</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reorder-point">Reorder Point</label>
+            <input type="number" id="reorder-point" name="reorderPoint" class="form-control" min="0">
+            <small class="form-help">Trigger point for reordering</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="max-stock">Maximum Stock</label>
+            <input type="number" id="max-stock" name="maxStock" class="form-control" min="0">
+            <small class="form-help">Maximum inventory level</small>
+          </div>
+        </div>
+
+        <h4>Location & Storage</h4>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="location">Storage Location</label>
+            <select id="location" name="location" class="form-control">
+              <option value="">Select location...</option>
+              <option value="Cooler">Cooler</option>
+              <option value="Freezer">Freezer</option>
+              <option value="Dry Storage">Dry Storage</option>
+              <option value="Pool">Pool</option>
+              <option value="Kitchen">Kitchen</option>
+              <option value="Men's Lounge">Men's Lounge</option>
+              <option value="Bar">Bar</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="area">Specific Area</label>
+            <input type="text" id="area" name="area" class="form-control" 
+                   placeholder="e.g., Top shelf, Bin A, Section 2">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="storage-instructions">Storage Instructions</label>
+          <textarea id="storage-instructions" name="storageInstructions" class="form-control" rows="2"
+                    placeholder="Special storage requirements..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="wasteEntryUnit">Default Waste Entry Unit</label>
+            <select id="wasteEntryUnit" name="wasteEntryUnit" class="form-control">
+              <option value="OZ">OZ (Ounces)</option>
+              <option value="LB">LB (Pounds)</option>
+              <option value="GAL">GAL (Gallons)</option>
+              <option value="EA">EA (Each)</option>
+              <option value="CS">CS (Cases)</option>
+              <option value="#10 CAN">#10 CAN</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="shelf-life-days">Shelf Life (Days)</label>
+            <input type="number" id="shelf-life-days" name="shelfLifeDays" class="form-control" min="1">
+            <small class="form-help">Expected shelf life in days</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tracking Tab -->
+    <div class="tab-content" id="tracking">
+      <div class="tab-section">
+        <h3>Tracking & Identification</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="barcode">Barcode</label>
+            <input type="text" id="barcode" name="barcode" class="form-control">
+            <small class="form-help">UPC, EAN, or internal barcode</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="lot-number">Lot Number</label>
+            <input type="text" id="lot-number" name="lotNumber" class="form-control">
+            <small class="form-help">Current batch/lot identifier</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="expiration-date">Expiration Date</label>
+            <input type="date" id="expiration-date" name="expirationDate" class="form-control">
+            <small class="form-help">Current batch expiration</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="last-count-date">Last Count Date</label>
+            <input type="date" id="last-count-date" name="lastCountDate" class="form-control">
+            <small class="form-help">When was this item last physically counted?</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="count-variance">Last Count Variance</label>
+            <input type="number" id="count-variance" name="countVariance" class="form-control" step="0.01">
+            <small class="form-help">Difference between expected and actual count</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="average-usage">Average Weekly Usage</label>
+            <input type="number" id="average-usage" name="averageUsagePerWeek" class="form-control" step="0.01">
+            <small class="form-help">Calculated average usage per week</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea id="notes" name="notes" class="form-control" rows="4" 
+                    placeholder="Additional notes, special handling instructions, etc."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="is-active">Status</label>
+            <div class="checkbox-wrapper">
+              <input type="checkbox" id="is-active" name="isActive" checked>
+              <label for="is-active" class="checkbox-label">Item is active</label>
+            </div>
+            <small class="form-help">Uncheck to soft-delete this item</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Tab -->
+    <div class="tab-content" id="history">
+      <div class="tab-section">
+        <h3>Item History & Audit Trail</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Created By</label>
+            <input type="text" id="created-by" name="createdBy" class="form-control" readonly>
+          </div>
+          
+          <div class="form-group">
+            <label>Last Modified By</label>
+            <input type="text" id="modified-by" name="modifiedBy" class="form-control" readonly>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Last Modified Date</label>
+          <input type="text" id="last-modified" name="lastModified" class="form-control" readonly>
+        </div>
+
+        <!-- Price History Section -->
+        <div class="history-section">
+          <h4>Price History</h4>
+          <div id="price-history-container">
+            <div class="price-history-item">
+              <small class="text-muted">Price history will appear here after the item is saved</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Movements Section -->
+        <div class="history-section">
+          <h4>Recent Inventory Movements</h4>
+          <div id="movement-history-container">
+            <div class="movement-history-item">
+              <small class="text-muted">Recent movements will appear here after the item is saved</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Usage Statistics -->
+        <div class="history-section">
+          <h4>Usage Statistics</h4>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-label">Total Received (30 days)</span>
+              <span class="stat-value" id="stat-received">—</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Total Used (30 days)</span>
+              <span class="stat-value" id="stat-used">—</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Total Wasted (30 days)</span>
+              <span class="stat-value" id="stat-wasted">—</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Turnover Rate</span>
+              <span class="stat-value" id="stat-turnover">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" id="cancel-button" class="btn btn-secondary">
+        Cancel
+      </button>
+      <button type="submit" id="save-button" class="btn btn-primary">
+        <span class="btn-icon">💾</span>
+        Save Item
+      </button>
+    </div>
+  </form>
 </div>
-</form>

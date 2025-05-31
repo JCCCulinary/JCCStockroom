@@ -6,16 +6,23 @@
   <title>JCC Stockroom</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   
-  <!-- Enhanced CSS Files - Load in order -->
+  <!-- FIXED: Only load main.css - it imports everything else -->
   <link rel="stylesheet" href="styles/main.css" />
-  <link rel="stylesheet" href="styles/components.css" />
-  <link rel="stylesheet" href="styles/modules.css" />
-  <link rel="stylesheet" href="styles/responsive.css" />
+  
+  <!-- Papa Parse Library for CSV Processing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  
+  <!-- Load auth protection BEFORE anything else -->
+  <script type="module" src="scripts/auth/redirect.js"></script>
 </head>
 <body>
   <header>
     <img src="assets/JCC-logo.png" alt="JCC Logo" class="header-logo left-logo" id="jcc-logo" />
-    <img src="assets/JCC_Stockroom_Logo.png" alt="JCC Stockroom Logo" class="header-logo right-logo" id="stockroom-logo" />
+        
+    <!-- Add logout button -->
+    <button id="logout-btn" class="logout-button" title="Logout">
+      <span>🚪</span> Logout
+    </button>
   </header>
 
   <nav class="tab-bar">
@@ -47,6 +54,7 @@
     </div>
   </main>
 
+  <!-- Load module system after auth check -->
   <script type="module" src="scripts/modules/moduleSystem.js"></script>
   
   <footer style="text-align:center; font-size:0.8rem; padding:1rem; color:#666;">
@@ -65,5 +73,96 @@
         document.getElementById("version-info").textContent = "Version info unavailable";
       });
   </script>
+
+  <style>
+    /* Additional styles for auth features */
+    .logout-button {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .logout-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .module-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--accent-color, #C8B560);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .module-loading h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--primary-color, #1A1A1A);
+    }
+
+    .module-loading p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* Enhanced navigation styles */
+    .tab-link.active {
+      background: var(--accent-color, #C8B560);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .tab-link {
+      transition: all 0.2s ease;
+    }
+
+    .tab-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .logout-button {
+        position: static;
+        transform: none;
+        margin-left: auto;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+      }
+      
+      header {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    }
+  </style>
 </body>
 </html>

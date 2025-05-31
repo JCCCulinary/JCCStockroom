@@ -1,441 +1,1011 @@
-<!-- templates/item-info-page.html - Enhanced Phase 1B (Clean Version) -->
-<div class="item-info-form">
-  <div class="form-header">
-    <h2 id="form-title">Add New Item</h2>
-    <div class="form-breadcrumb">
-      <span>Inventory</span> > <span id="breadcrumb-action">Add Item</span>
+<!-- templates/item-info-page.html -->
+<!-- Mobile-First Item Info Template for JCC Stockroom - UPDATED: Decimal On Hand + Portion Size -->
+
+<div class="mobile-item-form">
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <button class="back-button" id="mobile-back-btn" type="button">
+            <span>←</span>
+            <span>Back</span>
+        </button>
+        <h1 class="item-title" id="mobile-item-title">Loading...</h1>
+        <div class="save-status saved" id="mobile-save-status">Saved</div>
+    </header>
+
+    <!-- Mobile Content -->
+    <main class="mobile-content">
+        <!-- Quick Edit Panel -->
+        <div class="quick-edit-panel">
+            <div class="quick-edit-header">
+                <span class="section-emoji">⚡</span>
+                <h2>Quick Edit</h2>
+                <span class="quick-edit-subtitle">Most common tasks</span>
+            </div>
+            
+            <!-- Item Name - Full Width -->
+            <div class="quick-edit-item-name">
+                <label class="touch-label" for="mobile-item-name">
+                    Item Name <span class="required">*</span>
+                </label>
+                <input type="text" 
+                       class="form-input item-name-input" 
+                       id="mobile-item-name" 
+                       name="name"
+                       placeholder="Enter item name"
+                       required
+                       maxlength="100">
+                <div class="form-error" id="mobile-name-error"></div>
+            </div>
+            
+            <!-- Quick Controls Grid -->
+            <div class="quick-edit-grid">
+                <!-- PAR Level -->
+                <div class="touch-quantity-input">
+                    <label class="touch-label">PAR Level</label>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" id="mobile-par-minus" type="button">−</button>
+                        <input type="number" class="qty-input" id="mobile-par-input" value="0" min="0" max="999" inputmode="numeric">
+                        <button class="qty-btn" id="mobile-par-plus" type="button">+</button>
+                    </div>
+                </div>
+
+                <!-- On Hand - UPDATED: Decimal support -->
+                <div class="touch-quantity-input">
+                    <label class="touch-label">On Hand <span class="decimal-hint">(cases)</span></label>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" id="mobile-onhand-minus" type="button" data-increment="0.05">−</button>
+                        <input type="number" 
+                               class="qty-input decimal-input" 
+                               id="mobile-onhand-input" 
+                               value="0.00" 
+                               min="0" 
+                               step="0.05" 
+                               inputmode="decimal"
+                               placeholder="0.00">
+                        <button class="qty-btn" id="mobile-onhand-plus" type="button" data-increment="0.05">+</button>
+                    </div>
+                    <div class="form-hint">Use decimals: 1.0 = full case, 0.5 = half case</div>
+                </div>
+
+                <!-- Location -->
+                <div class="touch-quantity-input">
+                    <label class="touch-label">Location</label>
+                    <select class="form-select location-select" id="mobile-location-select">
+                        <option value="">Select Location</option>
+                        <option value="Cooler">Cooler</option>
+                        <option value="Freezer">Freezer</option>
+                        <option value="Dry Storage">Dry Storage</option>
+                        <option value="Kitchen">Kitchen</option>
+                        <option value="Bar">Bar</option>
+                        <option value="Pool">Pool</option>
+                        <option value="Men's Lounge">Men's Lounge</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Sections -->
+        <form id="mobile-item-form" novalidate>
+            <!-- Pricing Details Section -->
+            <div class="expandable-section" id="mobile-pricing-section">
+                <div class="section-header" tabindex="0" role="button" aria-expanded="false">
+                    <h3 class="section-title">
+                        <span class="section-emoji">💰</span>
+                        <span>Pricing & Case Breakdown</span>
+                    </h3>
+                    <span class="expand-arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-inner">
+                        <!-- Visual Case Helper -->
+                        <div class="case-visual-helper" id="mobile-case-visual">
+                            <div class="case-diagram">
+                                <div class="case-info">
+                                    <span class="case-label">Vendor Case Format:</span>
+                                    <div class="case-format-display">
+                                        <span class="case-format" id="mobile-visual-format">12/24oz</span>
+                                        <span class="format-explanation">
+                                            = <span class="total-units" id="mobile-visual-total">288</span>
+                                            <span class="waste-unit" id="mobile-visual-waste-unit">oz</span> per case
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pricing-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="mobile-units-per-case">Units per Case</label>
+                                <input type="number" 
+                                       class="form-input" 
+                                       id="mobile-units-per-case" 
+                                       name="unitsPerCase"
+                                       placeholder="12"
+                                       min="1"
+                                       max="999"
+                                       inputmode="numeric">
+                                <div class="form-hint">From case format like "12/24oz" → enter 12</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="mobile-size-per-unit">Size per Unit</label>
+                                <input type="number" 
+                                       class="form-input" 
+                                       id="mobile-size-per-unit" 
+                                       name="sizePerUnit"
+                                       placeholder="24"
+                                       min="0.01"
+                                       max="999"
+                                       step="0.01"
+                                       inputmode="decimal">
+                                <div class="form-hint">From case format like "12/24oz" → enter 24</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="mobile-unit-type">Unit Type</label>
+                                <select class="form-select" id="mobile-unit-type" name="unitType">
+                                    <option value="OZ">OZ (Ounces)</option>
+                                    <option value="LB">LB (Pounds)</option>
+                                    <option value="GAL">GAL (Gallons)</option>
+                                    <option value="QT">QT (Quarts)</option>
+                                    <option value="PT">PT (Pints)</option>
+                                    <option value="FL OZ">FL OZ (Fluid Ounces)</option>
+                                    <option value="EA">EA (Each)</option>
+                                    <option value="#10 CAN">#10 CAN</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <div class="form-hint">From case format like "12/24oz" → select OZ</div>
+                            </div>
+
+                            <!-- NEW: Portion Size Field -->
+                            <div class="form-group">
+                                <label class="form-label" for="mobile-portion-size">Portion Size</label>
+                                <div class="portion-size-input-group">
+                                    <input type="number" 
+                                           class="form-input portion-size-value" 
+                                           id="mobile-portion-size" 
+                                           name="portionSize"
+                                           placeholder="6"
+                                           min="0.1"
+                                           max="999"
+                                           step="0.1"
+                                           inputmode="decimal">
+                                    <select class="form-select portion-size-unit" id="mobile-portion-unit" name="portionUnit">
+                                        <option value="OZ">OZ</option>
+                                        <option value="LB">LB</option>
+                                        <option value="GAL">GAL</option>
+                                        <option value="QT">QT</option>
+                                        <option value="PT">PT</option>
+                                        <option value="FL OZ">FL OZ</option>
+                                        <option value="EA">EA</option>
+                                        <option value="CT">CT</option>
+                                    </select>
+                                </div>
+                                <div class="form-hint">Individual serving size (e.g., 6 OZ chicken breast)</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="mobile-case-cost">Case Cost</label>
+                                <input type="text" 
+                                       class="form-input currency-input" 
+                                       id="mobile-case-cost" 
+                                       name="caseCost"
+                                       placeholder="$0.00"
+                                       inputmode="decimal">
+                                <div class="form-hint">What you pay per case from vendor</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Calculated Results -->
+                        <div class="pricing-results">
+                            <div class="result-row primary-result">
+                                <span class="result-label">Cost per Unit:</span>
+                                <span class="result-value" id="mobile-unit-cost">$0.00</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Total Volume:</span>
+                                <span class="result-value" id="mobile-total-volume">0 units</span>
+                            </div>
+                            <!-- NEW: Portion Calculations -->
+                            <div class="result-row" id="mobile-portion-results" style="display: none;">
+                                <span class="result-label">Cost per Portion:</span>
+                                <span class="result-value" id="mobile-portion-cost">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vendor Information Section -->
+            <div class="expandable-section" id="mobile-vendor-section">
+                <div class="section-header" tabindex="0" role="button" aria-expanded="false">
+                    <h3 class="section-title">
+                        <span class="section-emoji">🏪</span>
+                        <span>Vendor Information</span>
+                    </h3>
+                    <span class="expand-arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-inner">
+                        <div class="form-group">
+                            <label class="form-label" for="mobile-vendor-name">Vendor Name</label>
+                            <input type="text" 
+                                   class="form-input" 
+                                   id="mobile-vendor-name" 
+                                   name="primaryVendor"
+                                   placeholder="Enter vendor name"
+                                   maxlength="100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="mobile-product-sku">Product SKU/Code</label>
+                            <input type="text" 
+                                   class="form-input" 
+                                   id="mobile-product-sku" 
+                                   name="vendorSKU"
+                                   placeholder="Vendor product code"
+                                   maxlength="50">
+                        </div>
+
+                        <!-- Brand Field -->
+                        <div class="form-group">
+                            <label class="form-label" for="mobile-brand">Brand</label>
+                            <input type="text" 
+                                   class="form-input" 
+                                   id="mobile-brand" 
+                                   name="brand"
+                                   placeholder="Product brand name"
+                                   maxlength="100">
+                        </div>
+
+                        <!-- Manufacturer Field -->
+                        <div class="form-group">
+                            <label class="form-label" for="mobile-manufacturer">Manufacturer</label>
+                            <input type="text" 
+                                   class="form-input" 
+                                   id="mobile-manufacturer" 
+                                   name="manufacturer"
+                                   placeholder="Manufacturer company name"
+                                   maxlength="100">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="mobile-vendor-notes">Vendor Notes</label>
+                            <textarea class="form-textarea" 
+                                      id="mobile-vendor-notes" 
+                                      name="vendorNotes"
+                                      placeholder="Special ordering instructions, minimum quantities, etc."
+                                      rows="3"
+                                      maxlength="500"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Storage & Tracking Section -->
+            <div class="expandable-section" id="mobile-storage-section">
+                <div class="section-header" tabindex="0" role="button" aria-expanded="false">
+                    <h3 class="section-title">
+                        <span class="section-emoji">📋</span>
+                        <span>Storage & Tracking</span>
+                    </h3>
+                    <span class="expand-arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-inner">
+                        <div class="form-group">
+                            <label class="form-label" for="mobile-area-input">Area/Section</label>
+                            <input type="text" 
+                                   class="form-input" 
+                                   id="mobile-area-input" 
+                                   name="area"
+                                   placeholder="Specific area or section (e.g., Main Protein Section)"
+                                   maxlength="50">
+                            <div class="form-hint">Specific location within the main storage area</div>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="mobile-for-event-checkbox" name="forEvent">
+                                <span class="checkbox-text">For Event Use</span>
+                                <span class="checkbox-hint">Check if this item is specifically for events</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="mobile-waste-unit">Waste Entry Unit</label>
+                            <select class="form-select" id="mobile-waste-unit" name="wasteEntryUnit">
+                                <option value="OZ">OZ (Ounces)</option>
+                                <option value="LB">LB (Pounds)</option>
+                                <option value="GAL">GAL (Gallons)</option>
+                                <option value="QT">QT (Quarts)</option>
+                                <option value="PT">PT (Pints)</option>
+                                <option value="FL OZ">FL OZ (Fluid Ounces)</option>
+                                <option value="EA">EA (Each)</option>
+                                <option value="CS">CS (Case)</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="form-hint">Unit used when entering waste log entries</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="mobile-notes-input">Storage Notes</label>
+                            <textarea class="form-textarea" 
+                                      id="mobile-notes-input" 
+                                      name="notes"
+                                      placeholder="Storage instructions, expiration notes, handling requirements..."
+                                      rows="4"
+                                      maxlength="1000"></textarea>
+                        </div>
+
+                        <!-- Additional Tracking Fields -->
+                        <div class="form-group">
+                            <label class="form-label" for="mobile-reorder-point">Reorder Point</label>
+                            <input type="number" 
+                                   class="form-input" 
+                                   id="mobile-reorder-point" 
+                                   name="reorderPoint"
+                                   placeholder="Trigger automatic reorder at this level"
+                                   min="0"
+                                   max="999"
+                                   step="0.05"
+                                   inputmode="decimal">
+                            <div class="form-hint">Leave blank to use PAR level (supports decimals)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Information Section -->
+            <div class="expandable-section" id="mobile-system-section">
+                <div class="section-header" tabindex="0" role="button" aria-expanded="false">
+                    <h3 class="section-title">
+                        <span class="section-emoji">ℹ️</span>
+                        <span>System Information</span>
+                    </h3>
+                    <span class="expand-arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-inner">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Item ID:</span>
+                                <span class="info-value" id="mobile-item-id">—</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Created:</span>
+                                <span class="info-value" id="mobile-created-date">—</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Last Modified:</span>
+                                <span class="info-value" id="mobile-last-modified">—</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Modified By:</span>
+                                <span class="info-value" id="mobile-modified-by">—</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <!-- Mobile Actions Footer -->
+    <div class="mobile-actions">
+        <button class="action-btn btn-secondary" id="mobile-save-btn" type="button">
+            <span class="btn-text">Save</span>
+            <span class="btn-spinner" id="mobile-save-spinner" style="display: none;">⏳</span>
+        </button>
+        <button class="action-btn btn-primary" id="mobile-save-close-btn" type="button">
+            <span class="btn-text">Save & Close</span>
+            <span class="btn-spinner" id="mobile-save-close-spinner" style="display: none;">⏳</span>
+        </button>
     </div>
-  </div>
-
-  <!-- Tab Navigation -->
-  <div class="tab-navigation">
-    <button class="tab-btn active" data-tab="basic-info">
-      <span class="tab-icon">📦</span>
-      Basic Info
-    </button>
-    <button class="tab-btn" data-tab="purchasing">
-      <span class="tab-icon">💰</span>
-      Purchasing
-    </button>
-    <button class="tab-btn" data-tab="inventory">
-      <span class="tab-icon">📊</span>
-      Inventory
-    </button>
-    <button class="tab-btn" data-tab="tracking">
-      <span class="tab-icon">🔍</span>
-      Tracking
-    </button>
-    <button class="tab-btn" data-tab="history">
-      <span class="tab-icon">📈</span>
-      History
-    </button>
-  </div>
-
-  <form id="item-form">
-    <!-- Basic Info Tab -->
-    <div class="tab-content active" id="basic-info">
-      <div class="tab-section">
-        <h3>Basic Information</h3>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="item-name">Item Name <span class="required">*</span></label>
-            <input type="text" id="item-name" name="name" required class="form-control">
-            <small class="form-help">Enter the full name of the item</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="category">Category</label>
-            <select id="category" name="category" class="form-control">
-              <option value="">Select category...</option>
-              <option value="Protein">Protein</option>
-              <option value="Dairy">Dairy</option>
-              <option value="Produce">Produce</option>
-              <option value="Dry Goods">Dry Goods</option>
-              <option value="Beverages">Beverages</option>
-              <option value="Frozen">Frozen</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="subcategory">Subcategory</label>
-            <input type="text" id="subcategory" name="subcategory" class="form-control">
-            <small class="form-help">More specific classification</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="for-event">For Event?</label>
-            <div class="checkbox-wrapper">
-              <input type="checkbox" id="for-event" name="forEvent">
-              <label for="for-event" class="checkbox-label">This item is used for events</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="full-description">Description</label>
-          <textarea id="full-description" name="fullDescription" class="form-control" rows="3" 
-                    placeholder="Detailed description of the item..."></textarea>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="item-image">Image URL</label>
-            <input type="url" id="item-image" name="itemImage" class="form-control" 
-                   placeholder="https://example.com/image.jpg">
-            <small class="form-help">Link to item photo</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="tags">Tags</label>
-            <input type="text" id="tags" name="tags" class="form-control" 
-                   placeholder="organic, local, specialty (comma-separated)">
-            <small class="form-help">Comma-separated tags for searching</small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="allergen-info">Allergen Information</label>
-          <div class="checkbox-group">
-            <label class="checkbox-item">
-              <input type="checkbox" name="allergens" value="Dairy"> Dairy
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="allergens" value="Eggs"> Eggs
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="allergens" value="Fish"> Fish
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="allergens" value="Shellfish"> Shellfish
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="allergens" value="Tree Nuts"> Tree Nuts
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="allergens" value="Peanuts"> Peanuts
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="allergens" value="Wheat"> Wheat
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="allergens" value="Soy"> Soy
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Purchasing Tab -->
-    <div class="tab-content" id="purchasing">
-      <div class="tab-section">
-        <h3>Vendor & Purchasing Information</h3>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="primary-vendor">Primary Vendor</label>
-            <input type="text" id="primary-vendor" name="primaryVendor" class="form-control">
-            <small class="form-help">Main supplier for this item</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="vendor-sku">Vendor SKU</label>
-            <input type="text" id="vendor-sku" name="vendorSKU" class="form-control">
-            <small class="form-help">Supplier's product code</small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="alternate-vendors">Alternate Vendors</label>
-          <textarea id="alternate-vendors" name="alternateVendors" class="form-control" rows="2"
-                    placeholder="Enter alternate vendors, one per line"></textarea>
-          <small class="form-help">Backup suppliers for this item</small>
-        </div>
-
-        <h4>Case Breakdown & Pricing</h4>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="caseQuantity">Units per Case</label>
-            <input type="number" id="caseQuantity" name="caseQuantity" class="form-control" step="0.01">
-          </div>
-          
-          <div class="form-group">
-            <label for="unitPerCase">Qty per Unit</label>
-            <input type="number" id="unitPerCase" name="unitPerCase" class="form-control" step="0.01">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="caseUnit">Case Unit Type</label>
-            <select id="caseUnit" name="caseUnit" class="form-control">
-              <option value="LB">LB (Pounds)</option>
-              <option value="OZ">OZ (Ounces)</option>
-              <option value="GAL">GAL (Gallons)</option>
-              <option value="EA">EA (Each)</option>
-              <option value="CS">CS (Cases)</option>
-              <option value="#10 CAN">#10 CAN</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="caseCost">Cost per Case</label>
-            <input type="number" id="caseCost" name="caseCost" class="form-control" step="0.01" 
-                   placeholder="0.00">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="unitCost">Unit Cost (Auto-calculated)</label>
-            <input type="text" id="unitCost" name="unitCost" class="form-control" readonly>
-            <small class="form-help">Automatically calculated from case cost</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="yield-percentage">Yield Percentage</label>
-            <input type="number" id="yield-percentage" name="yieldPercentage" class="form-control" 
-                   min="0" max="100" value="100">
-            <small class="form-help">Usable portion percentage</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Inventory Tab -->
-    <div class="tab-content" id="inventory">
-      <div class="tab-section">
-        <h3>Inventory Levels & Location</h3>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="par">PAR Level</label>
-            <input type="number" id="par" name="par" class="form-control" min="0">
-            <small class="form-help">Target inventory level</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="on-hand">Current On Hand</label>
-            <input type="number" id="on-hand" name="onHand" class="form-control" min="0">
-            <small class="form-help">Current stock quantity</small>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="reorder-point">Reorder Point</label>
-            <input type="number" id="reorder-point" name="reorderPoint" class="form-control" min="0">
-            <small class="form-help">Trigger point for reordering</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="max-stock">Maximum Stock</label>
-            <input type="number" id="max-stock" name="maxStock" class="form-control" min="0">
-            <small class="form-help">Maximum inventory level</small>
-          </div>
-        </div>
-
-        <h4>Location & Storage</h4>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="location">Storage Location</label>
-            <select id="location" name="location" class="form-control">
-              <option value="">Select location...</option>
-              <option value="Cooler">Cooler</option>
-              <option value="Freezer">Freezer</option>
-              <option value="Dry Storage">Dry Storage</option>
-              <option value="Pool">Pool</option>
-              <option value="Kitchen">Kitchen</option>
-              <option value="Men's Lounge">Men's Lounge</option>
-              <option value="Bar">Bar</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="area">Specific Area</label>
-            <input type="text" id="area" name="area" class="form-control" 
-                   placeholder="e.g., Top shelf, Bin A, Section 2">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="storage-instructions">Storage Instructions</label>
-          <textarea id="storage-instructions" name="storageInstructions" class="form-control" rows="2"
-                    placeholder="Special storage requirements..."></textarea>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="wasteEntryUnit">Default Waste Entry Unit</label>
-            <select id="wasteEntryUnit" name="wasteEntryUnit" class="form-control">
-              <option value="OZ">OZ (Ounces)</option>
-              <option value="LB">LB (Pounds)</option>
-              <option value="GAL">GAL (Gallons)</option>
-              <option value="EA">EA (Each)</option>
-              <option value="CS">CS (Cases)</option>
-              <option value="#10 CAN">#10 CAN</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="shelf-life-days">Shelf Life (Days)</label>
-            <input type="number" id="shelf-life-days" name="shelfLifeDays" class="form-control" min="1">
-            <small class="form-help">Expected shelf life in days</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tracking Tab -->
-    <div class="tab-content" id="tracking">
-      <div class="tab-section">
-        <h3>Tracking & Identification</h3>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="barcode">Barcode</label>
-            <input type="text" id="barcode" name="barcode" class="form-control">
-            <small class="form-help">UPC, EAN, or internal barcode</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="lot-number">Lot Number</label>
-            <input type="text" id="lot-number" name="lotNumber" class="form-control">
-            <small class="form-help">Current batch/lot identifier</small>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="expiration-date">Expiration Date</label>
-            <input type="date" id="expiration-date" name="expirationDate" class="form-control">
-            <small class="form-help">Current batch expiration</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="last-count-date">Last Count Date</label>
-            <input type="date" id="last-count-date" name="lastCountDate" class="form-control">
-            <small class="form-help">When was this item last physically counted?</small>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="count-variance">Last Count Variance</label>
-            <input type="number" id="count-variance" name="countVariance" class="form-control" step="0.01">
-            <small class="form-help">Difference between expected and actual count</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="average-usage">Average Weekly Usage</label>
-            <input type="number" id="average-usage" name="averageUsagePerWeek" class="form-control" step="0.01">
-            <small class="form-help">Calculated average usage per week</small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="notes">Notes</label>
-          <textarea id="notes" name="notes" class="form-control" rows="4" 
-                    placeholder="Additional notes, special handling instructions, etc."></textarea>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="is-active">Status</label>
-            <div class="checkbox-wrapper">
-              <input type="checkbox" id="is-active" name="isActive" checked>
-              <label for="is-active" class="checkbox-label">Item is active</label>
-            </div>
-            <small class="form-help">Uncheck to soft-delete this item</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- History Tab -->
-    <div class="tab-content" id="history">
-      <div class="tab-section">
-        <h3>Item History & Audit Trail</h3>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label>Created By</label>
-            <input type="text" id="created-by" name="createdBy" class="form-control" readonly>
-          </div>
-          
-          <div class="form-group">
-            <label>Last Modified By</label>
-            <input type="text" id="modified-by" name="modifiedBy" class="form-control" readonly>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Last Modified Date</label>
-          <input type="text" id="last-modified" name="lastModified" class="form-control" readonly>
-        </div>
-
-        <!-- Price History Section -->
-        <div class="history-section">
-          <h4>Price History</h4>
-          <div id="price-history-container">
-            <div class="price-history-item">
-              <small class="text-muted">Price history will appear here after the item is saved</small>
-            </div>
-          </div>
-        </div>
-
-        <!-- Recent Movements Section -->
-        <div class="history-section">
-          <h4>Recent Inventory Movements</h4>
-          <div id="movement-history-container">
-            <div class="movement-history-item">
-              <small class="text-muted">Recent movements will appear here after the item is saved</small>
-            </div>
-          </div>
-        </div>
-
-        <!-- Usage Statistics -->
-        <div class="history-section">
-          <h4>Usage Statistics</h4>
-          <div class="stats-grid">
-            <div class="stat-item">
-              <span class="stat-label">Total Received (30 days)</span>
-              <span class="stat-value" id="stat-received">—</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Total Used (30 days)</span>
-              <span class="stat-value" id="stat-used">—</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Total Wasted (30 days)</span>
-              <span class="stat-value" id="stat-wasted">—</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Turnover Rate</span>
-              <span class="stat-value" id="stat-turnover">—</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Form Actions -->
-    <div class="form-actions">
-      <button type="button" id="cancel-button" class="btn btn-secondary">
-        Cancel
-      </button>
-      <button type="submit" id="save-button" class="btn btn-primary">
-        <span class="btn-icon">💾</span>
-        Save Item
-      </button>
-    </div>
-  </form>
 </div>
+
+<!-- Hidden form for compatibility -->
+<input type="hidden" id="mobile-item-id-input" name="id">
+
+<style>
+:root {
+    --mobile-primary: #2196f3;
+    --mobile-secondary: #4caf50;
+    --mobile-accent: #e8f5e8;
+    --mobile-bg-primary: #ffffff;
+    --mobile-bg-secondary: #f8f9fa;
+    --mobile-text-primary: #212121;
+    --mobile-text-secondary: #757575;
+    --mobile-border: #e0e0e0;
+    --mobile-error: #f44336;
+    --mobile-spacing-xs: 0.25rem;
+    --mobile-spacing-sm: 0.5rem;
+    --mobile-spacing-md: 1rem;
+    --mobile-spacing-lg: 1.5rem;
+    --mobile-spacing-xl: 2rem;
+    --mobile-radius-md: 8px;
+    --mobile-font-sm: 14px;
+    --mobile-font-base: 16px;
+    --mobile-font-lg: 18px;
+    --mobile-font-xl: 24px;
+}
+
+.mobile-item-form {
+    min-height: 100vh;
+    background: var(--mobile-bg-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+.mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--mobile-bg-primary);
+    border-bottom: 1px solid var(--mobile-border);
+    padding: var(--mobile-spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.back-button {
+    background: none;
+    border: none;
+    font-size: var(--mobile-font-lg);
+    color: var(--mobile-primary);
+    cursor: pointer;
+    padding: var(--mobile-spacing-sm);
+    border-radius: var(--mobile-radius-md);
+    display: flex;
+    align-items: center;
+    gap: var(--mobile-spacing-xs);
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.item-title {
+    font-size: var(--mobile-font-lg);
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+    margin: 0 var(--mobile-spacing-md);
+}
+
+.save-status {
+    font-size: var(--mobile-font-sm);
+    padding: var(--mobile-spacing-xs) var(--mobile-spacing-sm);
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.save-status.saved { background: var(--mobile-accent); color: var(--mobile-secondary); }
+.save-status.saving { background: #fff3cd; color: #856404; }
+.save-status.error { background: #f8d7da; color: var(--mobile-error); }
+
+.mobile-content {
+    padding: var(--mobile-spacing-md);
+    padding-bottom: calc(var(--mobile-spacing-xl) + 60px);
+}
+
+.quick-edit-panel {
+    background: linear-gradient(135deg, var(--mobile-accent) 0%, #f0f8f0 100%);
+    border: 2px solid var(--mobile-secondary);
+    border-radius: 12px;
+    padding: var(--mobile-spacing-lg);
+    margin-bottom: var(--mobile-spacing-lg);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.quick-edit-header {
+    display: flex;
+    align-items: center;
+    gap: var(--mobile-spacing-sm);
+    margin-bottom: var(--mobile-spacing-lg);
+}
+
+.quick-edit-header h2 {
+    margin: 0;
+    font-size: var(--mobile-font-lg);
+    color: var(--mobile-text-primary);
+}
+
+.quick-edit-subtitle {
+    font-size: var(--mobile-font-sm);
+    color: var(--mobile-text-secondary);
+    font-weight: normal;
+}
+
+/* Item Name - Full Width */
+.quick-edit-item-name {
+    margin-bottom: var(--mobile-spacing-lg);
+}
+
+.item-name-input {
+    width: 100%;
+    padding: var(--mobile-spacing-md);
+    border: 2px solid var(--mobile-border);
+    border-radius: var(--mobile-radius-md);
+    font-size: var(--mobile-font-base);
+    font-weight: 600;
+    background: var(--mobile-bg-primary);
+    transition: border-color 0.2s ease;
+}
+
+.item-name-input:focus {
+    border-color: var(--mobile-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+/* Quick Controls Grid - 3 columns */
+.quick-edit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--mobile-spacing-md);
+}
+
+@media (max-width: 640px) {
+    .quick-edit-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--mobile-spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-edit-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.touch-quantity-input {
+    background: var(--mobile-bg-primary);
+    border-radius: var(--mobile-radius-md);
+    padding: var(--mobile-spacing-md);
+    border: 1px solid var(--mobile-border);
+}
+
+.touch-label {
+    display: block;
+    font-size: var(--mobile-font-sm);
+    font-weight: 600;
+    color: var(--mobile-text-secondary);
+    margin-bottom: var(--mobile-spacing-sm);
+}
+
+/* NEW: Decimal hint styling */
+.decimal-hint {
+    font-weight: 400;
+    opacity: 0.8;
+    font-size: calc(var(--mobile-font-sm) - 1px);
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--mobile-spacing-sm);
+}
+
+.qty-btn {
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--mobile-primary);
+    background: var(--mobile-bg-primary);
+    color: var(--mobile-primary);
+    border-radius: var(--mobile-radius-md);
+    font-size: var(--mobile-font-lg);
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.qty-input {
+    flex: 1;
+    text-align: center;
+    border: 2px solid var(--mobile-border);
+    border-radius: var(--mobile-radius-md);
+    padding: var(--mobile-spacing-md);
+    font-size: var(--mobile-font-base);
+    font-weight: 600;
+    background: var(--mobile-bg-primary);
+}
+
+/* NEW: Decimal input styling */
+.decimal-input {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    letter-spacing: 0.5px;
+}
+
+.location-select {
+    width: 100%;
+    padding: var(--mobile-spacing-md);
+    border: 2px solid var(--mobile-border);
+    border-radius: var(--mobile-radius-md);
+    font-size: var(--mobile-font-sm);
+    background: var(--mobile-bg-primary);
+    cursor: pointer;
+}
+
+.expandable-section {
+    border: 1px solid var(--mobile-border);
+    border-radius: var(--mobile-radius-md);
+    margin-bottom: var(--mobile-spacing-md);
+    background: var(--mobile-bg-primary);
+    overflow: hidden;
+}
+
+.section-header {
+    padding: var(--mobile-spacing-lg);
+    background: var(--mobile-bg-secondary);
+    border-bottom: 1px solid var(--mobile-border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 60px;
+    transition: background 0.2s ease;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--mobile-spacing-sm);
+    font-size: var(--mobile-font-lg);
+    font-weight: 600;
+    margin: 0;
+}
+
+.section-emoji {
+    font-size: var(--mobile-font-xl);
+}
+
+.expand-arrow {
+    font-size: var(--mobile-font-lg);
+    transition: transform 0.3s ease;
+    color: var(--mobile-text-secondary);
+}
+
+.expandable-section.expanded .expand-arrow {
+    transform: rotate(180deg);
+}
+
+.section-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.expandable-section.expanded .section-content {
+    max-height: 1000px;
+}
+
+.section-inner {
+    padding: var(--mobile-spacing-lg);
+}
+
+.form-group {
+    margin-bottom: var(--mobile-spacing-lg);
+}
+
+.form-label {
+    display: block;
+    font-size: var(--mobile-font-base);
+    font-weight: 600;
+    color: var(--mobile-text-primary);
+    margin-bottom: var(--mobile-spacing-sm);
+}
+
+.form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: var(--mobile-spacing-md);
+    border: 2px solid var(--mobile-border);
+    border-radius: var(--mobile-radius-md);
+    font-size: var(--mobile-font-base);
+    background: var(--mobile-bg-primary);
+    transition: border-color 0.2s ease;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--mobile-primary);
+}
+
+.form-textarea {
+    min-height: 100px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+/* NEW: Portion Size Input Group */
+.portion-size-input-group {
+    display: flex;
+    gap: var(--mobile-spacing-sm);
+}
+
+.portion-size-value {
+    flex: 2;
+    margin-bottom: 0;
+}
+
+.portion-size-unit {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.case-visual-helper {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: var(--mobile-radius-md);
+    padding: var(--mobile-spacing-lg);
+    margin-bottom: var(--mobile-spacing-lg);
+    border: 1px solid var(--mobile-border);
+}
+
+.case-diagram {
+    text-align: center;
+}
+
+.case-label {
+    display: block;
+    font-size: var(--mobile-font-sm);
+    font-weight: 600;
+    color: var(--mobile-text-secondary);
+    margin-bottom: var(--mobile-spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.case-format-display {
+    text-align: center;
+    margin-top: var(--mobile-spacing-md);
+}
+
+.case-format {
+    display: inline-block;
+    font-size: var(--mobile-font-xl);
+    font-weight: 700;
+    color: var(--mobile-primary);
+    background: var(--mobile-bg-primary);
+    padding: var(--mobile-spacing-sm) var(--mobile-spacing-lg);
+    border-radius: var(--mobile-radius-md);
+    border: 2px solid var(--mobile-primary);
+    margin-bottom: var(--mobile-spacing-sm);
+}
+
+.format-explanation {
+    display: block;
+    font-size: var(--mobile-font-base);
+    color: var(--mobile-text-secondary);
+    font-weight: 600;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mobile-spacing-md);
+    margin-bottom: var(--mobile-spacing-lg);
+}
+
+.pricing-results {
+    background: var(--mobile-accent);
+    border-radius: var(--mobile-radius-md);
+    padding: var(--mobile-spacing-lg);
+    border: 1px solid var(--mobile-secondary);
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--mobile-spacing-sm) 0;
+}
+
+.primary-result {
+    font-size: var(--mobile-font-lg);
+    font-weight: 600;
+    border-bottom: 1px solid var(--mobile-secondary);
+    margin-bottom: var(--mobile-spacing-sm);
+}
+
+.result-label {
+    color: var(--mobile-text-secondary);
+}
+
+.result-value {
+    color: var(--mobile-text-primary);
+    font-weight: 600;
+}
+
+.required {
+    color: var(--mobile-error);
+    margin-left: 2px;
+}
+
+.form-error {
+    color: var(--mobile-error);
+    font-size: var(--mobile-font-sm);
+    margin-top: var(--mobile-spacing-xs);
+    display: none;
+}
+
+.form-hint {
+    font-size: var(--mobile-font-sm);
+    color: var(--mobile-text-secondary);
+    margin-top: var(--mobile-spacing-xs);
+    font-style: italic;
+}
+
+.checkbox-group {
+    background: var(--mobile-bg-secondary);
+    border-radius: var(--mobile-radius-md);
+    padding: var(--mobile-spacing-lg);
+    border: 1px solid var(--mobile-border);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--mobile-spacing-md);
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.checkbox-text {
+    font-weight: 600;
+    color: var(--mobile-text-primary);
+}
+
+.checkbox-hint {
+    display: block;
+    font-size: var(--mobile-font-sm);
+    color: var(--mobile-text-secondary);
+    margin-top: var(--mobile-spacing-xs);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mobile-spacing-md);
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-spacing-xs);
+}
+
+.info-label {
+    font-size: var(--mobile-font-sm);
+    font-weight: 600;
+    color: var(--mobile-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: var(--mobile-font-base);
+    color: var(--mobile-text-primary);
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.mobile-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--mobile-bg-primary);
+    border-top: 1px solid var(--mobile-border);
+    padding: var(--mobile-spacing-md);
+    display: flex;
+    gap: var(--mobile-spacing-md);
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+.action-btn {
+    flex: 1;
+    padding: var(--mobile-spacing-lg);
+    border: none;
+    border-radius: var(--mobile-radius-md);
+    font-size: var(--mobile-font-base);
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 48px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--mobile-spacing-sm);
+}
+
+.btn-primary {
+    background: var(--mobile-primary);
+    color: white;
+}
+
+.btn-secondary {
+    background: var(--mobile-secondary);
+    color: white;
+}
+
+.btn-spinner {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .pricing-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .result-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--mobile-spacing-xs);
+    }
+    
+    .portion-size-input-group {
+        flex-direction: column;
+    }
+    
+    .portion-size-value,
+    .portion-size-unit {
+        flex: 1;
+    }
+}
+</style>
+
+<script>
+// Initialize mobile form immediately when template loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Mobile item form template loaded with decimal support');
+    
+    // Set sample data for demonstration
+    setTimeout(() => {
+        // Set sample data if elements exist
+        const titleEl = document.getElementById('mobile-item-title');
+        const nameEl = document.getElementById('mobile-item-name');
+        const parEl = document.getElementById('mobile-par-input');
+        const onHandEl = document.getElementById('mobile-onhand-input');
+        const locationEl = document.getElementById('mobile-location-select');
+        const areaEl = document.getElementById('mobile-area-input');
+        const unitsEl = document.getElementById('mobile-units-per-case');
+        const sizeEl = document.getElementById('mobile-size-per-unit');
+        const unitTypeEl = document.getElementById('mobile-unit-type');
+        const costEl = document.getElementById('mobile-case-cost');
+        const brandEl = document.getElementById('mobile-brand');
+        const manufacturerEl = document.getElementById('mobile-manufacturer');
+        const portionSizeEl = document.getElementById('mobile-portion-size');
+        const portionUnitEl = document.getElementById('mobile-portion-unit');
+        
+        if (titleEl) titleEl.textContent = 'Chicken Breast';
+        if (nameEl) nameEl.value = 'Chicken Breast - Boneless Skinless 6 OZ';
+        if (parEl) parEl.value = '25';
+        if (onHandEl) onHandEl.value = '18.50'; // NEW: Decimal example
+        if (locationEl) locationEl.value = 'Cooler';
+        if (areaEl) areaEl.value = 'Main Protein Section';
+        
+        // Case format example: 4/5LB (4 units per case, 5 LB each)
+        if (unitsEl) unitsEl.value = '4';
+        if (sizeEl) sizeEl.value = '5';
+        if (unitTypeEl) unitTypeEl.value = 'LB';
+        if (costEl) costEl.value = '$45.00';
+        
+        // Brand and Manufacturer sample data
+        if (brandEl) brandEl.value = 'Perdue';
+        if (manufacturerEl) manufacturerEl.value = 'Perdue Farms Inc';
+        
+        // NEW: Portion size sample data (parsed from name)
+        if (portionSizeEl) portionSizeEl.value = '6';
+        if (portionUnitEl) portionUnitEl.value = 'OZ';
+        
+        // This should calculate to: 4 × 5 = 20 LB per case, $45.00 ÷ 20 = $2.25/LB
+        // Portion cost: 6 OZ = 0.375 LB, 0.375 × $2.25 = $0.84 per 6 OZ portion
+    }, 100);
+});
+</script>

@@ -1,6 +1,6 @@
 import { db } from "../firebase/firebase.js";
 import { convertUnits, getConvertibleUnits } from "../utils/dataUtils.js";
-import { getDoc, doc, setDoc, collection } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getDoc, doc, setDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { StorageController } from "../storage/storageController.js";
 
 function updateUnitDropdown(baseUnit) {

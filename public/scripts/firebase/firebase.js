@@ -1,13 +1,17 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  getDocs, 
-  setDoc, 
-  doc, 
+// scripts/firebase/firebase.js - FIXED VERSION with all necessary exports
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,        // ✅ Added this missing export
+  setDoc,
+  doc,
   deleteDoc,
-  writeBatch
-} from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+  updateDoc      // ✅ Added this for future use
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ⚠️ IMPORTANT: All Firebase imports must use the same version (10.12.0)
 
 const firebaseConfig = {
   apiKey: "AIzaSyA_FZ4R_rI8NkFIGXRpJfXw5g1ab73fc9Q",
@@ -19,7 +23,20 @@ const firebaseConfig = {
   measurementId: "G-LEQRZ0SF6T"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export { db, collection, getDocs, setDoc, doc, deleteDoc, writeBatch };
+console.log("✅ Firebase initialized with consistent v10.12.0 SDK");
+
+// Export all the Firebase functions that modules need
+export { 
+  db, 
+  collection, 
+  getDocs,     // For getting multiple documents 
+  getDoc,      // ✅ For getting single documents (needed by item-info.js)
+  setDoc, 
+  doc, 
+  deleteDoc,
+  updateDoc    // ✅ For partial document updates
+};

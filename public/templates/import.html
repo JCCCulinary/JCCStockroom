@@ -1,1 +1,544 @@
-<div>Import Module</div>
+<!-- templates/import.html - CustomerFirst Invoice Import System -->
+<div class="import-module">
+  <div class="import-header">
+    <h2>Invoice Import</h2>
+    <p class="import-subtitle">Upload vendor invoices to automatically update inventory</p>
+  </div>
+
+  <!-- Step 1: File Upload -->
+  <div id="upload-section" class="import-section">
+    <div class="upload-zone" id="upload-zone">
+      <div class="upload-icon">📁</div>
+      <h3>Upload Invoice</h3>
+      <p>Drag and drop your invoice file here, or click to browse</p>
+      <p class="upload-formats">Supported: CSV, PDF, Excel</p>
+      <input type="file" id="file-input" accept=".csv,.pdf,.xlsx,.xls" hidden>
+      <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+        Choose File
+      </button>
+    </div>
+    
+    <div id="file-info" class="file-info" style="display: none;">
+      <div class="file-details">
+        <span id="file-name"></span>
+        <span id="file-size"></span>
+        <span id="detected-vendor"></span>
+      </div>
+      <button id="remove-file" class="btn btn-secondary">Remove File</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Processing Status -->
+  <div id="processing-section" class="import-section" style="display: none;">
+    <div class="processing-status">
+      <div class="spinner"></div>
+      <h3>Processing Invoice...</h3>
+      <p id="processing-message">Analyzing file and extracting data...</p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Data Preview -->
+  <div id="preview-section" class="import-section" style="display: none;">
+    <div class="section-header">
+      <h3>📊 Invoice Data Preview</h3>
+      <div class="invoice-summary">
+        <span>Invoice Date: <strong id="invoice-date"></strong></span>
+        <span>Vendor: <strong id="vendor-name"></strong></span>
+        <span>Items: <strong id="item-count"></strong></span>
+        <span>Total: <strong id="invoice-total"></strong></span>
+      </div>
+    </div>
+    
+    <div class="preview-table-container">
+      <table class="preview-table">
+        <thead>
+          <tr>
+            <th>Product #</th>
+            <th>Description</th>
+            <th>Brand</th>
+            <th>Pack Size</th>
+            <th>Qty Shipped</th>
+            <th>Case Cost</th>
+            <th>Units/Case</th>
+            <th>Unit Cost</th>
+          </tr>
+        </thead>
+        <tbody id="preview-table-body">
+          <!-- Populated by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="preview-actions">
+      <button id="proceed-to-matching" class="btn btn-primary">Proceed to Matching</button>
+      <button id="cancel-import" class="btn btn-secondary">Cancel Import</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Item Matching & Review -->
+  <div id="matching-section" class="import-section" style="display: none;">
+    <div class="section-header">
+      <h3>🎯 Item Matching & Review</h3>
+      <div class="matching-summary">
+        <div class="match-stats">
+          <span class="stat auto-matched">
+            <span id="auto-matched-count">0</span> Auto-matched
+          </span>
+          <span class="stat needs-review">
+            <span id="needs-review-count">0</span> Needs Review
+          </span>
+          <span class="stat new-items">
+            <span id="new-items-count">0</span> New Items
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auto-matched Items -->
+    <div class="match-category auto-matched-section">
+      <h4>🟢 Auto-Matched Items (<span id="auto-matched-total">0</span>)</h4>
+      <div class="match-items" id="auto-matched-items">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Items Needing Review -->
+    <div class="match-category needs-review-section">
+      <h4>🟡 Items Needing Review (<span id="needs-review-total">0</span>)</h4>
+      <div class="match-items" id="needs-review-items">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- New Items -->
+    <div class="match-category new-items-section">
+      <h4>🔴 New Items (<span id="new-items-total">0</span>)</h4>
+      <div class="match-items" id="new-items-list">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="matching-actions">
+      <button id="apply-changes" class="btn btn-success">Apply All Changes</button>
+      <button id="back-to-preview" class="btn btn-secondary">Back to Preview</button>
+      <button id="cancel-matching" class="btn btn-secondary">Cancel Import</button>
+    </div>
+  </div>
+
+  <!-- Step 5: Import Complete -->
+  <div id="complete-section" class="import-section" style="display: none;">
+    <div class="import-success">
+      <div class="success-icon">✅</div>
+      <h3>Import Complete!</h3>
+      <div class="import-results">
+        <p><strong id="items-updated">0</strong> items updated</p>
+        <p><strong id="items-created">0</strong> new items created</p>
+        <p><strong id="total-value-imported">$0.00</strong> total value imported</p>
+      </div>
+      
+      <div class="complete-actions">
+        <button id="view-inventory" class="btn btn-primary">View Inventory</button>
+        <button id="import-another" class="btn btn-secondary">Import Another Invoice</button>
+        <button id="download-summary" class="btn btn-secondary">Download Summary</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Display -->
+  <div id="error-section" class="import-section error-section" style="display: none;">
+    <div class="error-content">
+      <div class="error-icon">❌</div>
+      <h3>Import Error</h3>
+      <p id="error-message">An error occurred during import.</p>
+      <div class="error-actions">
+        <button id="retry-import" class="btn btn-primary">Try Again</button>
+        <button id="start-over" class="btn btn-secondary">Start Over</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Import Module Styles */
+.import-module {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.import-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.import-subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.import-section {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Upload Zone */
+.upload-zone {
+  border: 3px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 3rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.upload-zone:hover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+}
+
+.upload-zone.dragover {
+  border-color: #007bff;
+  background-color: #e3f2fd;
+}
+
+.upload-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.upload-formats {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 1rem 0;
+}
+
+.file-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+
+.file-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Processing Status */
+.processing-status {
+  text-align: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #007bff;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Section Headers */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.invoice-summary {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.invoice-summary span {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Preview Table */
+.preview-table-container {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.preview-table th,
+.preview-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.preview-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+
+.preview-table tr:hover {
+  background: #f8f9fa;
+}
+
+/* Matching Summary */
+.matching-summary {
+  margin-bottom: 2rem;
+}
+
+.match-stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 6px;
+  min-width: 120px;
+}
+
+.stat.auto-matched {
+  background: #d4edda;
+  color: #155724;
+}
+
+.stat.needs-review {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.stat.new-items {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.stat span:first-child {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Match Categories */
+.match-category {
+  margin-bottom: 2rem;
+}
+
+.match-category h4 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.match-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.match-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: white;
+}
+
+.match-item.auto-matched {
+  border-left: 4px solid #28a745;
+  background: #f8fff9;
+}
+
+.match-item.needs-review {
+  border-left: 4px solid #ffc107;
+  background: #fffef8;
+}
+
+.match-item.new-item {
+  border-left: 4px solid #dc3545;
+  background: #fff8f8;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.item-details {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.match-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Action Buttons */
+.preview-actions,
+.matching-actions,
+.complete-actions,
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Success/Error States */
+.import-success,
+.error-content {
+  text-align: center;
+}
+
+.success-icon,
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.import-results {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin: 1.5rem 0;
+}
+
+.import-results p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.error-section {
+  border-left: 4px solid #dc3545;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .import-module {
+    padding: 1rem;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .invoice-summary,
+  .match-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .match-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .match-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  
+  .match-actions button {
+    flex: 1;
+  }
+}
+
+/* Button Styles */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #545b62;
+}
+
+.btn-success {
+  background: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #1e7e34;
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8rem;
+}
+</style>

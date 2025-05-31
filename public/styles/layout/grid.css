@@ -1,0 +1,759 @@
+/* JCC Stockroom - Grid System */
+/* Mobile-first, responsive layout foundation */
+
+/* ==========================================
+   CONTAINER SYSTEM
+   ========================================== */
+
+/* Base container */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+/* Fluid container */
+.container-fluid {
+  width: 100%;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+/* Responsive container breakpoints */
+@media (min-width: 640px) {
+  .container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+  
+  .container-fluid {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+  
+  .container-fluid {
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+}
+
+/* ==========================================
+   FLEXBOX GRID SYSTEM
+   ========================================== */
+
+/* Row container */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: calc(-1 * var(--space-3));
+  margin-right: calc(-1 * var(--space-3));
+}
+
+/* Column base */
+.col {
+  flex: 1;
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+/* Auto-width columns */
+.col-auto {
+  flex: 0 0 auto;
+  width: auto;
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+/* 12-column system - Mobile first */
+.col-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
+.col-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+.col-3 { flex: 0 0 25%; max-width: 25%; }
+.col-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+.col-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+.col-6 { flex: 0 0 50%; max-width: 50%; }
+.col-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+.col-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+.col-9 { flex: 0 0 75%; max-width: 75%; }
+.col-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+.col-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
+.col-12 { flex: 0 0 100%; max-width: 100%; }
+
+/* Column padding */
+.col,
+.col-auto,
+[class*="col-"] {
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+/* ==========================================
+   RESPONSIVE GRID CLASSES
+   ========================================== */
+
+/* Small screens (640px+) */
+@media (min-width: 640px) {
+  .col-sm { flex: 1; }
+  .col-sm-auto { flex: 0 0 auto; width: auto; }
+  .col-sm-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
+  .col-sm-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+  .col-sm-3 { flex: 0 0 25%; max-width: 25%; }
+  .col-sm-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+  .col-sm-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+  .col-sm-6 { flex: 0 0 50%; max-width: 50%; }
+  .col-sm-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+  .col-sm-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+  .col-sm-9 { flex: 0 0 75%; max-width: 75%; }
+  .col-sm-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+  .col-sm-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
+  .col-sm-12 { flex: 0 0 100%; max-width: 100%; }
+}
+
+/* Medium screens (768px+) */
+@media (min-width: 768px) {
+  .col-md { flex: 1; }
+  .col-md-auto { flex: 0 0 auto; width: auto; }
+  .col-md-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
+  .col-md-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+  .col-md-3 { flex: 0 0 25%; max-width: 25%; }
+  .col-md-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+  .col-md-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+  .col-md-6 { flex: 0 0 50%; max-width: 50%; }
+  .col-md-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+  .col-md-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+  .col-md-9 { flex: 0 0 75%; max-width: 75%; }
+  .col-md-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+  .col-md-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
+  .col-md-12 { flex: 0 0 100%; max-width: 100%; }
+}
+
+/* Large screens (1024px+) */
+@media (min-width: 1024px) {
+  .col-lg { flex: 1; }
+  .col-lg-auto { flex: 0 0 auto; width: auto; }
+  .col-lg-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
+  .col-lg-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+  .col-lg-3 { flex: 0 0 25%; max-width: 25%; }
+  .col-lg-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+  .col-lg-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+  .col-lg-6 { flex: 0 0 50%; max-width: 50%; }
+  .col-lg-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+  .col-lg-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+  .col-lg-9 { flex: 0 0 75%; max-width: 75%; }
+  .col-lg-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+  .col-lg-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
+  .col-lg-12 { flex: 0 0 100%; max-width: 100%; }
+}
+
+/* ==========================================
+   CSS GRID LAYOUTS
+   ========================================== */
+
+/* Base grid container */
+.grid {
+  display: grid;
+  gap: var(--space-6);
+  width: 100%;
+}
+
+/* Auto-fit grids */
+.grid-auto {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid-auto-sm {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.grid-auto-lg {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Fixed column grids */
+.grid-1 { grid-template-columns: 1fr; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-5 { grid-template-columns: repeat(5, 1fr); }
+.grid-6 { grid-template-columns: repeat(6, 1fr); }
+
+/* Responsive grid columns */
+@media (min-width: 640px) {
+  .grid-sm-1 { grid-template-columns: 1fr; }
+  .grid-sm-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-sm-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-sm-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (min-width: 768px) {
+  .grid-md-1 { grid-template-columns: 1fr; }
+  .grid-md-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-md-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-md-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-md-5 { grid-template-columns: repeat(5, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .grid-lg-1 { grid-template-columns: 1fr; }
+  .grid-lg-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-lg-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-lg-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-lg-5 { grid-template-columns: repeat(5, 1fr); }
+  .grid-lg-6 { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* Grid gaps */
+.gap-0 { gap: 0; }
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-6 { gap: var(--space-6); }
+.gap-8 { gap: var(--space-8); }
+
+/* Column and row gaps */
+.col-gap-2 { column-gap: var(--space-2); }
+.col-gap-4 { column-gap: var(--space-4); }
+.col-gap-6 { column-gap: var(--space-6); }
+
+.row-gap-2 { row-gap: var(--space-2); }
+.row-gap-4 { row-gap: var(--space-4); }
+.row-gap-6 { row-gap: var(--space-6); }
+
+/* ==========================================
+   DASHBOARD GRID LAYOUTS
+   ========================================== */
+
+/* Main dashboard grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-6);
+  padding: var(--space-6) 0;
+  animation: dashboardFadeIn 0.5s ease-out;
+}
+
+@keyframes dashboardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* KPI stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+/* Overview grid for main content */
+.overview-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+/* Content sidebar layout */
+.content-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+/* ==========================================
+   INVENTORY GRID LAYOUTS
+   ========================================== */
+
+/* Inventory list grid */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+/* Inventory filters sidebar */
+.inventory-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.inventory-filters {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-4));
+}
+
+/* Item details layout */
+.item-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+/* ==========================================
+   FORM GRID LAYOUTS
+   ========================================== */
+
+/* Form sections grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+/* Two-column form layout */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+/* Three-column form layout */
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+/* Form field groups */
+.form-group-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+.form-group-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+/* ==========================================
+   CARD GRID LAYOUTS
+   ========================================== */
+
+/* Card deck grid */
+.card-deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+/* Card masonry layout */
+.card-masonry {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+/* Card list layout */
+.card-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+/* ==========================================
+   TABLE GRID LAYOUTS
+   ========================================== */
+
+/* Table container grid */
+.table-layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-4);
+  min-height: 400px;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.table-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-3);
+  align-items: center;
+}
+
+/* ==========================================
+   JCC-SPECIFIC GRID LAYOUTS
+   ========================================== */
+
+/* Main app layout */
+.app-layout {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  min-height: 100vh;
+}
+
+.app-header {
+  grid-row: 1;
+}
+
+.app-navigation {
+  grid-row: 2;
+}
+
+.app-content {
+  grid-row: 3;
+  padding: var(--space-6);
+  overflow-y: auto;
+}
+
+.app-footer {
+  grid-row: 4;
+}
+
+/* Module content layout */
+.module-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Waste log layout */
+.waste-log-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.waste-summary {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-4));
+}
+
+/* Item info layout */
+.item-info-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+/* ==========================================
+   MOBILE GRID OPTIMIZATIONS
+   ========================================== */
+
+@media (max-width: 639px) {
+  /* Single column on mobile */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  .overview-grid,
+  .content-sidebar,
+  .inventory-layout,
+  .item-details-grid,
+  .form-grid-2,
+  .form-grid-3,
+  .waste-log-layout,
+  .item-info-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  /* Stack form groups */
+  .form-group-grid-2 {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  /* Mobile card adjustments */
+  .card-deck {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  .card-masonry {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Table controls stack */
+  .table-header {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  .table-controls {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+  
+  /* App content padding */
+  .app-content {
+    padding: var(--space-4);
+  }
+  
+  /* Hide sticky sidebars on mobile */
+  .inventory-filters,
+  .waste-summary {
+    position: static;
+  }
+}
+
+/* ==========================================
+   TABLET GRID OPTIMIZATIONS
+   ========================================== */
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  
+  .content-sidebar {
+    grid-template-columns: 1fr;
+  }
+  
+  .inventory-layout {
+    grid-template-columns: 200px 1fr;
+  }
+  
+  .form-grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .card-deck {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+/* ==========================================
+   DESKTOP GRID OPTIMIZATIONS
+   ========================================== */
+
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-8);
+    padding: var(--space-8) 0;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-6);
+  }
+  
+  .app-content {
+    padding: var(--space-8);
+  }
+  
+  .card-deck {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  .form-grid-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  .table-controls {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+/* ==========================================
+   UTILITY GRID CLASSES
+   ========================================== */
+
+/* Alignment utilities */
+.place-center { place-items: center; }
+.place-start { place-items: start; }
+.place-end { place-items: end; }
+
+.justify-center { justify-content: center; }
+.justify-start { justify-content: start; }
+.justify-end { justify-content: end; }
+.justify-between { justify-content: space-between; }
+
+.align-center { align-items: center; }
+.align-start { align-items: start; }
+.align-end { align-items: end; }
+.align-stretch { align-items: stretch; }
+
+/* Grid item utilities */
+.col-span-2 { grid-column: span 2; }
+.col-span-3 { grid-column: span 3; }
+.col-span-4 { grid-column: span 4; }
+.col-span-full { grid-column: 1 / -1; }
+
+.row-span-2 { grid-row: span 2; }
+.row-span-3 { grid-row: span 3; }
+.row-span-4 { grid-row: span 4; }
+
+/* Order utilities */
+.order-first { order: -1; }
+.order-last { order: 999; }
+.order-none { order: 0; }
+
+/* ==========================================
+   PRINT GRID STYLES
+   ========================================== */
+
+@media print {
+  .container,
+  .container-fluid {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  
+  .row {
+    margin: 0 !important;
+  }
+  
+  .col,
+  [class*="col-"] {
+    padding: 0 !important;
+    margin-bottom: 12pt !important;
+  }
+  
+  .dashboard-grid,
+  .stats-grid,
+  .card-deck {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12pt !important;
+    page-break-inside: avoid;
+  }
+  
+  .overview-grid,
+  .content-sidebar,
+  .inventory-layout,
+  .waste-log-layout,
+  .item-info-layout {
+    grid-template-columns: 1fr !important;
+    gap: 12pt !important;
+  }
+  
+  .app-layout {
+    grid-template-rows: auto auto 1fr !important;
+  }
+  
+  .app-content {
+    padding: 0 !important;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY ENHANCEMENTS
+   ========================================== */
+
+/* Focus management for grid items */
+.grid > *:focus,
+.row > *:focus {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .row {
+    border: 1px solid currentColor;
+  }
+  
+  [class*="col-"] {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-grid {
+    animation: none !important;
+  }
+}
+
+/* Screen reader support */
+.grid-sr-label {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Skip to main content for grid layouts */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 8px;
+  z-index: var(--z-max);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border-focus);
+}
+
+.skip-to-content:focus {
+  top: 6px;
+}
+
+/* ==========================================
+   GRID DEBUGGING (DEVELOPMENT ONLY)
+   ========================================== */
+
+/* Uncomment for development debugging */
+/*
+.debug-grid * {
+  outline: 1px solid rgba(255, 0, 0, 0.1);
+  background: rgba(0, 255, 0, 0.05);
+}
+
+.debug-grid .row {
+  outline: 2px solid rgba(0, 0, 255, 0.3);
+}
+
+.debug-grid [class*="col-"] {
+  outline: 1px solid rgba(255, 0, 0, 0.3);
+  background: rgba(255, 0, 0, 0.1);
+}
+*/

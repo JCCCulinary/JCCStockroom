@@ -1,0 +1,25 @@
+styles/
+├── core/
+│   ├── variables.css      ✅ DONE - Design tokens (200 lines)
+│   ├── reset.css         🎯 NEXT - CSS reset (50 lines)
+│   └── typography.css    📝 THEN - Font system (100 lines)
+├── components/
+│   ├── buttons.css       # All button variants (150 lines)
+│   ├── forms.css         # Form elements (200 lines)
+│   ├── tables.css        # Table components (180 lines)
+│   ├── cards.css         # Card layouts (120 lines)
+│   ├── status-badges.css # Status indicators (80 lines)
+│   └── alerts.css        # Alert system (60 lines)
+├── layout/
+│   ├── header.css        # Header styles (100 lines)
+│   ├── navigation.css    # Tab navigation (120 lines)
+│   └── grid.css          # Layout grid (80 lines)
+├── modules/
+│   ├── inventory.css     # Inventory-specific styles (200 lines)
+│   ├── dashboard.css     # Dashboard module (150 lines)
+│   ├── waste-log.css     # Waste log module (100 lines)
+│   └── item-form.css     # Item form module (180 lines)
+├── utilities/
+│   ├── responsive.css    # Responsive utilities (150 lines)
+│   └── helpers.css       # Utility classes (100 lines)
+└── main.css              # Import orchestration (50 lines)

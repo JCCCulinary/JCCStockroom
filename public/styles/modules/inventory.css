@@ -198,6 +198,71 @@
 }
 
 /* ==========================================
+   BULK SELECTION CHECKBOXES - FIX FOR MISSING CHECKBOXES
+   ========================================== */
+
+/* Bulk select column styling */
+.inventory-table .bulk-select {
+  width: 40px !important;
+  min-width: 40px !important;
+  padding: var(--space-2) !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+}
+
+/* Checkbox inputs in inventory table - Force visibility */
+.inventory-table .bulk-select input[type="checkbox"],
+.inventory-table .item-checkbox,
+.inventory-table #select-all {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 auto !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 1 !important;
+  -webkit-appearance: checkbox !important;
+  -moz-appearance: checkbox !important;
+  appearance: checkbox !important;
+  background: var(--bg-primary) !important;
+  border: 2px solid var(--border-medium) !important;
+  border-radius: var(--radius-xs) !important;
+  transform: none !important;
+}
+
+/* Checkbox focus state */
+.inventory-table input[type="checkbox"]:focus {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+  border-color: var(--border-focus);
+}
+
+/* Checkbox hover state */
+.inventory-table input[type="checkbox"]:hover {
+  border-color: var(--border-dark);
+  background: var(--bg-hover);
+}
+
+/* Checked state styling */
+.inventory-table input[type="checkbox"]:checked {
+  background: var(--jcc-header);
+  border-color: var(--jcc-header);
+  color: var(--text-white);
+}
+
+/* Ensure table cell doesn't hide checkbox */
+.inventory-table td.bulk-select,
+.inventory-table th.bulk-select {
+  padding: var(--space-2) !important;
+  overflow: visible !important;
+  position: relative;
+}
+
+/* ==========================================
    NEW: DECIMAL & PORTION SIZE SUPPORT
    ========================================== */
 
@@ -821,6 +886,18 @@
   .vendor-info {
     max-width: 150px;
   }
+  
+  /* Mobile checkbox adjustments */
+  .inventory-table .bulk-select {
+    width: 35px !important;
+    min-width: 35px !important;
+    padding: var(--space-1) !important;
+  }
+  
+  .inventory-table input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+  }
 }
 
 @media (max-width: 479px) {
@@ -949,6 +1026,11 @@
   .decimal-value {
     font-weight: bold !important;
   }
+  
+  /* Hide checkboxes in print */
+  .bulk-select {
+    display: none !important;
+  }
 }
 
 /* ==========================================
@@ -982,6 +1064,10 @@
   
   .decimal-value {
     font-weight: bold !important;
+  }
+  
+  .inventory-table input[type="checkbox"] {
+    border-width: 3px !important;
   }
 }
 

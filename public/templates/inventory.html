@@ -1,93 +1,83 @@
-<!-- templates/inventory.html - Enhanced with Pagination -->
+<!-- templates/inventory.html - UPDATED: Removed Unit Cost column -->
 <div class="inventory-module">
   <div class="inventory-header">
-    <h2>Inventory Management</h2>
-    <div class="inventory-controls">
+    <h2 class="module-title">Inventory Management</h2>
+    <div class="inventory-actions">
       <!-- Search and Filters Row -->
-      <div class="filter-row">
-        <input type="text" id="search" placeholder="Search items, vendors, tags..." class="search-input">
-        
-        <select id="filter-location" class="filter-select">
-          <option value="">All Locations</option>
-          <option value="Cooler">Cooler</option>
-          <option value="Freezer">Freezer</option>
-          <option value="Dry Storage">Dry Storage</option>
-          <option value="Pool">Pool</option>
-          <option value="Kitchen">Kitchen</option>
-          <option value="Men's Lounge">Men's Lounge</option>
-          <option value="Bar">Bar</option>
-          <option value="Other">Other</option>
-        </select>
+      <div class="inventory-search-section">
+        <div class="search-filters-grid">
+          <div class="inventory-search">
+            <input type="text" id="search" placeholder="Search items, vendors, tags..." class="form-control">
+            <span class="search-icon">🔍</span>
+          </div>
+          
+          <select id="filter-location" class="form-control filter-select">
+            <option value="">All Locations</option>
+            <option value="Cooler">Cooler</option>
+            <option value="Freezer">Freezer</option>
+            <option value="Dry Storage">Dry Storage</option>
+            <option value="Pool">Pool</option>
+            <option value="Kitchen">Kitchen</option>
+            <option value="Men's Lounge">Men's Lounge</option>
+            <option value="Bar">Bar</option>
+            <option value="Other">Other</option>
+          </select>
 
-        <select id="filter-category" class="filter-select">
-          <option value="">All Categories</option>
-          <option value="Protein">Protein</option>
-          <option value="Dairy">Dairy</option>
-          <option value="Produce">Produce</option>
-          <option value="Dry Goods">Dry Goods</option>
-          <option value="Beverages">Beverages</option>
-          <option value="Frozen">Frozen</option>
-          <option value="Other">Other</option>
-        </select>
+          <select id="filter-status" class="form-control filter-select">
+            <option value="">All Status</option>
+            <option value="excellent">Excellent</option>
+            <option value="good">Good</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+            <option value="expiring">Expiring</option>
+          </select>
 
-        <select id="filter-event" class="filter-select">
-          <option value="">All Items</option>
-          <option value="true">For Event</option>
-          <option value="false">Not for Event</option>
-        </select>
+          <button class="btn btn-secondary clear-filters" id="clear-filters">Clear</button>
+        </div>
 
-        <select id="filter-status" class="filter-select">
-          <option value="">All Status</option>
-          <option value="good">Good Stock</option>
-          <option value="low">Low Stock</option>
-          <option value="out">Out of Stock</option>
-          <option value="expiring">Expiring Soon</option>
-        </select>
-      </div>
+        <!-- Quick Filter Buttons -->
+        <div class="status-nav">
+          <div class="status-nav-item" data-filter="low-stock">Low Stock</div>
+          <div class="status-nav-item" data-filter="out-of-stock">Out of Stock</div>
+          <div class="status-nav-item" data-filter="expiring">Expiring Soon</div>
+          <div class="status-nav-item active" data-filter="all">Show All</div>
+        </div>
 
-      <!-- Quick Filter Buttons -->
-      <div class="quick-filters">
-        <button class="quick-filter-btn" data-filter="low-stock">Low Stock</button>
-        <button class="quick-filter-btn" data-filter="out-of-stock">Out of Stock</button>
-        <button class="quick-filter-btn" data-filter="expiring">Expiring Soon</button>
-        <button class="quick-filter-btn" data-filter="for-event">Event Items</button>
-        <button class="quick-filter-btn active" data-filter="all">Show All</button>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="action-buttons">
-        <button id="add-item-button" class="btn btn-primary">
-          <span class="btn-icon">+</span>Add Item
-        </button>
-        <button id="bulk-actions-btn" class="btn btn-secondary" style="display: none;">
-          Bulk Actions
-        </button>
+        <!-- Action Buttons -->
+        <div class="btn-toolbar">
+          <button id="add-item-button" class="btn btn-success add-item-btn">
+            <span>+</span>Add Item
+          </button>
+          <button id="bulk-actions-btn" class="btn btn-secondary" style="display: none;">
+            Bulk Actions
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Inventory Summary Stats -->
-  <div class="inventory-stats">
-    <div class="stat-card">
-      <span class="stat-label">Total Items</span>
-      <span id="total-items" class="stat-value">0</span>
+  <div class="inventory-summary">
+    <div class="summary-card total-items">
+      <div class="summary-card-label">Total Items</div>
+      <div id="total-items" class="summary-card-value">0</div>
     </div>
-    <div class="stat-card">
-      <span class="stat-label">Total Value</span>
-      <span id="total-value" class="stat-value">$0.00</span>
+    <div class="summary-card total-value">
+      <div class="summary-card-label">Total Value</div>
+      <div id="total-value" class="summary-card-value">$0.00</div>
     </div>
-    <div class="stat-card low-stock">
-      <span class="stat-label">Low Stock</span>
-      <span id="low-stock-count" class="stat-value">0</span>
+    <div class="summary-card low-stock">
+      <div class="summary-card-label">Low Stock</div>
+      <div id="low-stock-count" class="summary-card-value">0</div>
     </div>
-    <div class="stat-card out-of-stock">
-      <span class="stat-label">Out of Stock</span>
-      <span id="out-stock-count" class="stat-value">0</span>
+    <div class="summary-card out-of-stock">
+      <div class="summary-card-label">Out of Stock</div>
+      <div id="out-stock-count" class="summary-card-value">0</div>
     </div>
   </div>
 
   <!-- Enhanced Inventory Table -->
-  <div class="table-container">
+  <div class="inventory-container">
     <table id="inventory-table" class="inventory-table table">
       <thead>
         <tr>
@@ -97,16 +87,12 @@
           <th class="sortable" data-sort="name">
             Item Name <span class="sort-indicator"></span>
           </th>
-          <th class="sortable" data-sort="category">
-            Category <span class="sort-indicator"></span>
-          </th>
           <th class="sortable" data-sort="location">
             Location <span class="sort-indicator"></span>
           </th>
           <th class="sortable" data-sort="primaryVendor">
             Vendor <span class="sort-indicator"></span>
           </th>
-          <th class="text-center">For Event?</th>
           <th class="sortable text-center" data-sort="par">
             PAR <span class="sort-indicator"></span>
           </th>
@@ -114,9 +100,6 @@
             On Hand <span class="sort-indicator"></span>
           </th>
           <th class="text-center">Status</th>
-          <th class="sortable text-right" data-sort="unitCost">
-            Unit Cost <span class="sort-indicator"></span>
-          </th>
           <th class="text-right">Total Value</th>
           <th class="text-center">Actions</th>
         </tr>
@@ -127,348 +110,32 @@
     </table>
   </div>
 
-  <!-- Pagination Container (Added by JavaScript) -->
-  <!-- This space reserved for pagination controls -->
-
-  <!-- Bulk Actions Panel (Hidden by default) -->
-  <div id="bulk-actions-panel" class="bulk-actions-panel" style="display: none;">
-    <div class="bulk-actions-content">
-      <span class="bulk-count">0 items selected</span>
-      <div class="bulk-buttons">
-        <button class="btn btn-secondary" id="bulk-edit-location">Change Location</button>
-        <button class="btn btn-secondary" id="bulk-edit-category">Change Category</button>
-        <button class="btn btn-secondary" id="bulk-toggle-event">Toggle Event Status</button>
-        <button class="btn btn-danger" id="bulk-delete">Delete Selected</button>
-        <button class="btn btn-light" id="bulk-cancel">Cancel</button>
+  <!-- Pagination uses design system classes -->
+  <!-- Bulk Actions Panel -->
+  <div id="bulk-actions-panel" class="card" style="display: none;">
+    <div class="card-body">
+      <div class="d-flex justify-between items-center">
+        <span class="font-semibold" id="bulk-count">0 items selected</span>
+        <div class="btn-group">
+          <button class="btn btn-sm btn-secondary" id="bulk-edit-location">Change Location</button>
+          <button class="btn btn-sm btn-danger" id="bulk-delete">Delete Selected</button>
+          <button class="btn btn-sm btn-light" id="bulk-cancel">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Loading Indicator -->
-  <div id="loading-indicator" class="loading-indicator" style="display: none;">
+  <div id="loading-indicator" class="inventory-loading" style="display: none;">
     <div class="spinner"></div>
     <span>Loading inventory...</span>
   </div>
 
   <!-- No Results Message -->
-  <div id="no-results" class="no-results" style="display: none;">
-    <div class="no-results-content">
-      <div class="empty-state-icon">📦</div>
-      <h3>No items found</h3>
-      <p>Try adjusting your search or filter criteria</p>
-      <button class="btn btn-primary" id="clear-filters">Clear All Filters</button>
-    </div>
+  <div id="no-results" class="inventory-empty" style="display: none;">
+    <div class="inventory-empty-icon">📦</div>
+    <h3>No items found</h3>
+    <p>Try adjusting your search or filter criteria</p>
+    <button class="btn btn-primary" id="clear-filters">Clear All Filters</button>
   </div>
 </div>
-
-<style>
-/* Pagination Styles */
-.pagination-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 2rem 0;
-  padding: 1rem;
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.pagination-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
-.pagination-select {
-  padding: 0.25rem 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 0.9rem;
-}
-
-.pagination-summary {
-  margin-left: 1rem;
-  font-weight: 500;
-  color: #495057;
-}
-
-.pagination-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.pagination-btn {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #dee2e6;
-  background: white;
-  color: #495057;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-  min-width: 40px;
-  text-align: center;
-}
-
-.pagination-btn:hover:not(:disabled) {
-  background: #e9ecef;
-  border-color: #adb5bd;
-}
-
-.pagination-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: #f8f9fa;
-}
-
-.pagination-btn.active {
-  background: var(--header-bg, #2c3e50);
-  color: white;
-  border-color: var(--header-bg, #2c3e50);
-}
-
-.page-numbers {
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-}
-
-.pagination-ellipsis {
-  padding: 0.5rem 0.25rem;
-  color: #6c757d;
-  font-size: 0.9rem;
-}
-
-.pagination-jump {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
-.page-jump-input {
-  width: 60px;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-/* Mobile responsive pagination */
-@media (max-width: 768px) {
-  .pagination-container {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-  }
-  
-  .pagination-info,
-  .pagination-controls,
-  .pagination-jump {
-    justify-content: center;
-  }
-  
-  .pagination-btn {
-    padding: 0.75rem;
-    min-width: 44px;
-  }
-  
-  .page-numbers {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-}
-
-/* Status indicator improvements */
-.status-excellent { background-color: #d4edda; }
-.status-good { background-color: #fff3cd; }
-.status-low { background-color: #f8d7da; }
-.status-out { background-color: #f5c2c7; }
-.status-expiring { background-color: #cff4fc; }
-
-/* Improved table styling */
-.inventory-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.inventory-table th {
-  background: #f8f9fa;
-  padding: 1rem 0.75rem;
-  font-weight: 600;
-  border-bottom: 2px solid #dee2e6;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.inventory-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #dee2e6;
-  vertical-align: middle;
-}
-
-.sortable {
-  cursor: pointer;
-  user-select: none;
-  position: relative;
-}
-
-.sortable:hover {
-  background-color: #e9ecef;
-}
-
-.sort-indicator {
-  margin-left: 0.5rem;
-  opacity: 0.5;
-}
-
-.sort-indicator.asc::after {
-  content: "▲";
-  opacity: 1;
-}
-
-.sort-indicator.desc::after {
-  content: "▼";
-  opacity: 1;
-}
-
-/* Enhanced action buttons */
-.action-buttons-cell {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
-.btn-sm {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.875rem;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-edit {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
-}
-
-.btn-edit:hover {
-  background: #0056b3;
-  border-color: #0056b3;
-}
-
-.btn-delete {
-  background: #dc3545;
-  color: white;
-  border-color: #dc3545;
-}
-
-.btn-delete:hover {
-  background: #c82333;
-  border-color: #c82333;
-}
-
-/* Status badges */
-.status-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.status-badge.status-excellent {
-  background: #d4edda;
-  color: #155724;
-}
-
-.status-badge.status-good {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.status-badge.status-low {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-.status-badge.status-out {
-  background: #f5c2c7;
-  color: #721c24;
-}
-
-.status-badge.status-expiring {
-  background: #cff4fc;
-  color: #055160;
-}
-
-/* Category badges */
-.category-badge {
-  padding: 0.25rem 0.5rem;
-  background: #e9ecef;
-  color: #495057;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-/* Item description styling */
-.item-description {
-  font-size: 0.85rem;
-  color: #6c757d;
-  margin-top: 0.25rem;
-}
-
-.vendor-sku {
-  font-size: 0.75rem;
-  color: #6c757d;
-  margin-top: 0.25rem;
-}
-
-/* Loading and empty states */
-.loading-indicator {
-  text-align: center;
-  padding: 3rem;
-  color: #6c757d;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid var(--header-bg, #2c3e50);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 1rem;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.no-results {
-  text-align: center;
-  padding: 3rem;
-  color: #6c757d;
-}
-
-.empty-state-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-}
-</style>

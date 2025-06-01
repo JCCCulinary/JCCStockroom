@@ -1,4 +1,4 @@
-// Enhanced item-info.js - UPDATED: Decimal On Hand + Portion Size Support
+// Enhanced item-info.js - UPDATED: Removed For Event field
 import { StorageController } from '../storage/storageController.js';
 import { db, doc, getDoc, setDoc } from '../firebase/firebase.js';
 import { convertUnits, getConvertibleUnits, parsePortionSize, formatPortionSize } from '../utils/dataUtils.js';
@@ -76,7 +76,6 @@ class MobileItemFormController {
             onHand: 0.0, // NEW: Default to decimal
             location: '',
             area: '',
-            forEvent: false,
             
             // Pricing & Pack Size
             unitsPerCase: 0,
@@ -162,7 +161,6 @@ class MobileItemFormController {
         
         // Storage & Tracking Section
         setElementValue('mobile-area-input', item.area);
-        setElementValue('mobile-for-event-checkbox', item.forEvent);
         setElementValue('mobile-notes-input', item.notes);
         
         // NEW: Format reorder point with decimal support
@@ -994,7 +992,6 @@ class MobileItemFormController {
             onHand: this.parseDecimalValue(getValue('mobile-onhand-input')), // NEW: Parse decimal
             location: getValue('mobile-location-select') || '',
             area: getValue('mobile-area-input') || '',
-            forEvent: getValue('mobile-for-event-checkbox') || false,
             
             // Pricing & Pack Size
             unitsPerCase: parseInt(getValue('mobile-units-per-case')) || 0,

@@ -94,7 +94,7 @@ export const StorageController = {
       onHand: this.validateDecimal(item.onHand, 0), // NEW: Decimal validation
       location: this.sanitizeString(item.location),
       area: this.sanitizeString(item.area),
-      forEvent: Boolean(item.forEvent),
+    
       
       // Pricing & Pack Size (NEW FIELD NAMES)
       unitsPerCase: this.validateInteger(item.unitsPerCase, 0),
@@ -350,9 +350,8 @@ export const StorageController = {
           (item.brand || '').toLowerCase().includes(searchLower) ||
           (item.manufacturer || '').toLowerCase().includes(searchLower) ||
           (item.primaryVendor || '').toLowerCase().includes(searchLower) ||
-          (item.vendorSKU || '').toLowerCase().includes(searchLower) ||
-          (item.category || '').toLowerCase().includes(searchLower)
-        );
+          (item.vendorSKU || '').toLowerCase().includes(searchLower) 
+           );
       });
 
       console.log(`🔍 Search for "${searchTerms}" found ${matchedItems.length} items`);

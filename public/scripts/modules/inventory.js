@@ -1,4 +1,4 @@
-// scripts/modules/inventory.js - UPDATED: Decimal display & new field support
+// scripts/modules/inventory.js - UPDATED: Removed Unit Cost column from display
 console.log("✅ Enhanced inventory.js with decimal support is running");
 
 import { loadItemForm } from './item-info.js';
@@ -42,10 +42,16 @@ function initializeInventory() {
 }
 
 /**
- * Setup pagination controls
+ * Setup pagination controls - FIXED: Added error handling
  */
 function setupPaginationControls() {
-  const tableContainer = document.querySelector('.table-container');
+  const tableContainer = document.querySelector('.inventory-container');
+  
+  // FIXED: Add error handling to prevent null reference
+  if (!tableContainer) {
+    console.error('Inventory container not found - pagination setup failed');
+    return;
+  }
   
   // Add pagination controls after the table
   const paginationHTML = `
@@ -283,12 +289,10 @@ function bindInventoryEvents() {
   // Search and filter inputs
   const searchInput = document.getElementById("search");
   const filterLocation = document.getElementById("filter-location");
-  const filterCategory = document.getElementById("filter-category");
-  const filterEvent = document.getElementById("filter-event");
   const filterStatus = document.getElementById("filter-status");
 
   // Quick filter buttons
-  const quickFilterBtns = document.querySelectorAll(".quick-filter-btn");
+  const quickFilterBtns = document.querySelectorAll(".status-nav-item");
 
   // Action buttons
   const addItemButton = document.getElementById("add-item-button");
@@ -304,8 +308,6 @@ function bindInventoryEvents() {
   // Event listeners
   searchInput?.addEventListener("input", debounce(applyFilters, 300));
   filterLocation?.addEventListener("change", applyFilters);
-  filterCategory?.addEventListener("change", applyFilters);
-  filterEvent?.addEventListener("change", applyFilters);
   filterStatus?.addEventListener("change", applyFilters);
 
   quickFilterBtns.forEach(btn => {
@@ -356,8 +358,6 @@ async function loadInventoryData() {
 function applyFilters() {
   const search = document.getElementById("search")?.value.toLowerCase() || "";
   const locationFilter = document.getElementById("filter-location")?.value || "";
-  const categoryFilter = document.getElementById("filter-category")?.value || "";
-  const eventFilter = document.getElementById("filter-event")?.value || "";
   const statusFilter = document.getElementById("filter-status")?.value || "";
 
   filteredData = inventoryData.filter(item => {
@@ -374,16 +374,10 @@ function applyFilters() {
     // Location filter
     const locationMatch = !locationFilter || item.location === locationFilter;
 
-    // Category filter
-    const categoryMatch = !categoryFilter || item.category === categoryFilter;
-
-    // Event filter
-    const eventMatch = !eventFilter || String(item.forEvent) === eventFilter;
-
     // Status filter
     const statusMatch = !statusFilter || getStockStatus(item) === statusFilter;
 
-    return searchMatch && locationMatch && categoryMatch && eventMatch && statusMatch;
+    return searchMatch && locationMatch && statusMatch;
   });
 
   // Apply current sort
@@ -402,13 +396,13 @@ function applyFilters() {
 }
 
 /**
- * Handle quick filter button clicks
+ * Handle quick filter button clicks - UPDATED: Removed for-event filter
  */
 function handleQuickFilter(e) {
   const filterType = e.target.dataset.filter;
   
   // Remove active class from all buttons
-  document.querySelectorAll(".quick-filter-btn").forEach(btn => {
+  document.querySelectorAll(".status-nav-item").forEach(btn => {
     btn.classList.remove("active");
   });
   
@@ -426,9 +420,6 @@ function handleQuickFilter(e) {
     case "expiring":
       document.getElementById("filter-status").value = "expiring";
       break;
-    case "for-event":
-      document.getElementById("filter-event").value = "true";
-      break;
     case "all":
     default:
       clearAllFilters(false);
@@ -439,20 +430,18 @@ function handleQuickFilter(e) {
 }
 
 /**
- * Clear all filters
+ * Clear all filters - UPDATED: Removed for-event filter
  */
 function clearAllFilters(resetActiveButton = true) {
   document.getElementById("search").value = "";
   document.getElementById("filter-location").value = "";
-  document.getElementById("filter-category").value = "";
-  document.getElementById("filter-event").value = "";
   document.getElementById("filter-status").value = "";
   
   if (resetActiveButton) {
-    document.querySelectorAll(".quick-filter-btn").forEach(btn => {
+    document.querySelectorAll(".status-nav-item").forEach(btn => {
       btn.classList.remove("active");
     });
-    document.querySelector(".quick-filter-btn[data-filter='all']").classList.add("active");
+    document.querySelector(".status-nav-item[data-filter='all']").classList.add("active");
   }
   
   applyFilters();
@@ -523,7 +512,7 @@ function updateSortIndicators() {
 
 /**
  * Display inventory items in the table (with pagination)
- * UPDATED: Enhanced display with decimal formatting and portion size
+ * UPDATED: Removed Unit Cost column from display, kept Total Value only
  */
 function displayInventory() {
   const tbody = document.getElementById("inventory-table-body");
@@ -566,13 +555,9 @@ function displayInventory() {
       <td class="item-name">
         <div class="item-details">
           <strong>${item.name || ""}</strong>
-          ${item.brand ? `<div class="item-brand">Brand: ${item.brand}</div>` : ""}
           ${portionInfo ? `<div class="item-portion">${portionInfo}</div>` : ""}
           ${item.fullDescription ? `<div class="item-description">${item.fullDescription}</div>` : ""}
         </div>
-      </td>
-      <td>
-        <span class="category-badge">${item.category || "Uncategorized"}</span>
       </td>
       <td>${item.location || ""}</td>
       <td>
@@ -580,15 +565,11 @@ function displayInventory() {
           ${vendorInfo}
         </div>
       </td>
-      <td class="text-center">
-        ${item.forEvent ? "✓" : ""}
-      </td>
       <td class="text-center">${item.par || ""}</td>
       <td class="text-center decimal-value">${formatDecimalValue(item.onHand)}</td>
       <td class="text-center">
         <span class="status-badge status-${stockStatus}">${getStatusText(stockStatus)}</span>
       </td>
-      <td class="text-right">${formatCurrency(unitCost)}</td>
       <td class="text-right">${formatCurrency(totalValue)}</td>
       <td class="text-center">
         <div class="action-buttons-cell">
@@ -835,18 +816,14 @@ function updateBulkActionsVisibility() {
 }
 
 /**
- * Setup bulk actions event listeners
+ * Setup bulk actions event listeners - UPDATED: Removed bulk toggle event
  */
 function setupBulkActions() {
   const bulkEditLocation = document.getElementById("bulk-edit-location");
-  const bulkEditCategory = document.getElementById("bulk-edit-category");
-  const bulkToggleEvent = document.getElementById("bulk-toggle-event");
   const bulkDelete = document.getElementById("bulk-delete");
   const bulkCancel = document.getElementById("bulk-cancel");
   
   bulkEditLocation?.addEventListener("click", handleBulkLocationChange);
-  bulkEditCategory?.addEventListener("click", handleBulkCategoryChange);
-  bulkToggleEvent?.addEventListener("click", handleBulkToggleEvent);
   bulkDelete?.addEventListener("click", handleBulkDelete);
   bulkCancel?.addEventListener("click", clearBulkSelection);
 }
@@ -875,81 +852,6 @@ async function handleBulkLocationChange() {
   } catch (error) {
     console.error("Bulk location update failed:", error);
     showToast("Failed to update locations", "error");
-  }
-}
-
-/**
- * Handle bulk category change
- */
-async function handleBulkCategoryChange() {
-  const categories = ["Protein", "Dairy", "Produce", "Dry Goods", "Beverages", "Frozen", "Other"];
-  const categorySelect = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-  
-  const modal = document.createElement('div');
-  modal.innerHTML = `
-    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
-      <div style="background: white; padding: 2rem; border-radius: 8px; min-width: 300px;">
-        <h3>Select Category</h3>
-        <select id="category-select" style="width: 100%; padding: 0.5rem; margin: 1rem 0;">
-          <option value="">Select category...</option>
-          ${categorySelect}
-        </select>
-        <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-          <button id="cancel-category" style="padding: 0.5rem 1rem;">Cancel</button>
-          <button id="apply-category" style="padding: 0.5rem 1rem; background: var(--header-bg); color: white; border: none;">Apply</button>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  document.body.appendChild(modal);
-  
-  modal.querySelector('#cancel-category').onclick = () => modal.remove();
-  modal.querySelector('#apply-category').onclick = async () => {
-    const newCategory = modal.querySelector('#category-select').value;
-    if (!newCategory) return;
-    
-    try {
-      const selectedItemsData = inventoryData.filter(item => selectedItems.has(item.id));
-      const updates = selectedItemsData.map(item => ({
-        ...item,
-        category: newCategory,
-        lastModified: new Date().toISOString(),
-        modifiedBy: "bulk_update"
-      }));
-      
-      await StorageController.save(updates);
-      showToast(`Updated category for ${selectedItems.size} items`, "success");
-      clearBulkSelection();
-      loadInventoryData();
-      modal.remove();
-    } catch (error) {
-      console.error("Bulk category update failed:", error);
-      showToast("Failed to update categories", "error");
-    }
-  };
-}
-
-/**
- * Handle bulk toggle event status
- */
-async function handleBulkToggleEvent() {
-  try {
-    const selectedItemsData = inventoryData.filter(item => selectedItems.has(item.id));
-    const updates = selectedItemsData.map(item => ({
-      ...item,
-      forEvent: !item.forEvent,
-      lastModified: new Date().toISOString(),
-      modifiedBy: "bulk_update"
-    }));
-    
-    await StorageController.save(updates);
-    showToast(`Toggled event status for ${selectedItems.size} items`, "success");
-    clearBulkSelection();
-    loadInventoryData();
-  } catch (error) {
-    console.error("Bulk toggle failed:", error);
-    showToast("Failed to toggle event status", "error");
   }
 }
 
@@ -1000,7 +902,7 @@ function showLoadingIndicator(show) {
  */
 function showNoResults(show) {
   const noResults = document.getElementById("no-results");
-  const tableContainer = document.querySelector(".table-container");
+  const tableContainer = document.querySelector(".inventory-container");
   
   if (noResults && tableContainer) {
     noResults.style.display = show ? "block" : "none";

@@ -1,4 +1,4 @@
-// scripts/modules/import.js - Complete Invoice Import Module with Enhanced Ben E. Keith PDF Support
+// scripts/modules/import.js - UPDATED: Enhanced Review Interface
 import { StorageController } from '../storage/storageController.js';
 import { parsePackSize, parsePortionSize, validatePortionSize, formatPortionSize } from '../utils/dataUtils.js';
 
@@ -63,12 +63,29 @@ class InvoiceImportController {
             
             this.setupEventListeners();
             this.showFileUpload();
+            this.initializeEnhancedImport();
             
-            console.log('📊 Invoice import initialized with Enhanced Ben E. Keith PDF support (SECURE MODE - sensitive data protected)');
+            console.log('📊 Enhanced Invoice Import initialized with comprehensive review system');
         } catch (error) {
             console.error('Failed to initialize invoice import:', error);
             this.showError('Failed to initialize import system');
         }
+    }
+
+    /**
+     * Initialize the enhanced import system
+     */
+    initializeEnhancedImport() {
+        // Setup global functions
+        this.setupGlobalItemFunctions();
+        
+        // Add custom CSS if not already present
+        this.addEnhancedStyles();
+        
+        // Setup keyboard shortcuts
+        this.setupKeyboardShortcuts();
+        
+        console.log('✨ Enhanced Import Review System initialized');
     }
 
     /**
@@ -133,8 +150,8 @@ class InvoiceImportController {
         const content = `
             <div class="invoice-import-container">
                 <div class="import-header">
-                    <h2>📊 Invoice Import</h2>
-                    <p>Import vendor invoices with automatic portion size detection</p>
+                    <h2>📊 Enhanced Invoice Import</h2>
+                    <p>Import vendor invoices with comprehensive review and editing capabilities</p>
                 </div>
                 
                 <div class="file-upload-area">
@@ -158,24 +175,24 @@ class InvoiceImportController {
                         </div>
                     </div>
                     <div class="feature">
-                        <span class="feature-icon">📄</span>
+                        <span class="feature-icon">✏️</span>
                         <div>
-                            <h4>Enhanced PDF Text Extraction</h4>
-                            <p>Processes PDF invoices with improved data extraction</p>
+                            <h4>Comprehensive Editing</h4>
+                            <p>Review and edit all data fields before importing</p>
                         </div>
                     </div>
                     <div class="feature">
                         <span class="feature-icon">📏</span>
                         <div>
-                            <h4>Portion Size Parsing</h4>
+                            <h4>Portion Size Detection</h4>
                             <p>Detects portion sizes like "6 OZ", "1/4 LB" from descriptions</p>
                         </div>
                     </div>
                     <div class="feature">
-                        <span class="feature-icon">💰</span>
+                        <span class="feature-icon">🪄</span>
                         <div>
-                            <h4>Decimal Quantities</h4>
-                            <p>Supports fractional case quantities (0.5, 0.75, etc.)</p>
+                            <h4>Auto-Fill Missing Data</h4>
+                            <p>Intelligently fills categories, locations, and default values</p>
                         </div>
                     </div>
                 </div>
@@ -244,13 +261,419 @@ class InvoiceImportController {
             // Update summary with portion size stats
             this.updateImportSummary();
 
-            // Show review interface
+            // Show enhanced review interface
             this.showReviewInterface();
 
         } catch (error) {
             console.error('File upload failed:', error);
             this.showError('Failed to process file: ' + error.message);
         }
+    }
+
+    /**
+     * Enhanced showReviewInterface - replaces the existing method
+     */
+    showReviewInterface() {
+        const summary = this.importData.summary;
+        
+        const content = `
+            <div class="import-review-container enhanced">
+                <div class="review-header">
+                    <h2>📋 Enhanced Import Review - ${this.importData.vendor}</h2>
+                    <p class="review-subtitle">Review and edit all data before importing. Click any field to edit.</p>
+                    
+                    <div class="import-summary">
+                        <div class="summary-stat">
+                            <span class="stat-number">${summary.totalItems}</span>
+                            <span class="stat-label">Total Items</span>
+                        </div>
+                        <div class="summary-stat success">
+                            <span class="stat-number">${summary.autoMatched}</span>
+                            <span class="stat-label">Auto-Matched</span>
+                        </div>
+                        <div class="summary-stat warning">
+                            <span class="stat-number">${summary.needsReview}</span>
+                            <span class="stat-label">Need Review</span>
+                        </div>
+                        <div class="summary-stat info">
+                            <span class="stat-number">${summary.newItems}</span>
+                            <span class="stat-label">New Items</span>
+                        </div>
+                        <div class="summary-stat portion">
+                            <span class="stat-number">${summary.portionsParsed}</span>
+                            <span class="stat-label">Portions Detected</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review-controls">
+                    <div class="view-toggles">
+                        <button class="btn-toggle active" data-view="all">All Items</button>
+                        <button class="btn-toggle" data-view="matched">Auto-Matched</button>
+                        <button class="btn-toggle" data-view="review">Need Review</button>
+                        <button class="btn-toggle" data-view="new">New Items</button>
+                    </div>
+                    
+                    <div class="bulk-actions">
+                        <button class="btn-secondary" id="expand-all-btn">📖 Expand All</button>
+                        <button class="btn-secondary" id="collapse-all-btn">📕 Collapse All</button>
+                        <button class="btn-secondary" id="auto-fill-btn">🪄 Auto-Fill Missing</button>
+                    </div>
+                </div>
+                
+                <div class="review-content enhanced" id="review-items-container">
+                    ${this.renderEnhancedReviewItems()}
+                </div>
+                
+                <div class="review-actions enhanced">
+                    <div class="action-group">
+                        <button class="btn-secondary" onclick="window.location.reload()">❌ Cancel Import</button>
+                        <button class="btn-secondary" id="save-draft-btn">💾 Save as Draft</button>
+                    </div>
+                    <div class="action-group">
+                        <button class="btn-secondary" id="validate-all-btn">✅ Validate All</button>
+                        <button class="btn-primary" id="apply-import-btn">🚀 Apply Import</button>
+                    </div>
+                </div>
+                
+                <div class="import-validation" id="validation-results" style="display: none;">
+                    <!-- Validation results will appear here -->
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('app-content').innerHTML = content;
+        this.setupEnhancedEventListeners();
+    }
+
+    /**
+     * Enhanced renderEnhancedReviewItems - comprehensive item rendering
+     */
+    renderEnhancedReviewItems() {
+        let html = '';
+        
+        this.importData.matchResults.forEach((match, index) => {
+            const item = match.extractedItem;
+            const isMatched = !match.requiresReview && !match.isNewItem;
+            const needsReview = match.requiresReview;
+            const isNew = match.isNewItem;
+            
+            let statusClass = 'enhanced-item';
+            let statusBadge = '';
+            
+            if (isMatched) {
+                statusClass += ' matched';
+                statusBadge = '<span class="status-badge success">✓ Auto-Matched</span>';
+            } else if (needsReview) {
+                statusClass += ' needs-review';
+                statusBadge = '<span class="status-badge warning">⚠ Needs Review</span>';
+            } else if (isNew) {
+                statusClass += ' new-item';
+                statusBadge = '<span class="status-badge info">+ New Item</span>';
+            }
+            
+            html += `
+                <div class="${statusClass}" data-item-index="${index}" data-view-type="${isMatched ? 'matched' : needsReview ? 'review' : 'new'}">
+                    <div class="item-header" onclick="toggleItemExpansion(${index})">
+                        <div class="item-header-info">
+                            <h4 class="item-name">${this.escapeHtml(item.name)}</h4>
+                            <div class="item-quick-info">
+                                <span class="quick-info-item">SKU: ${item.vendorSKU}</span>
+                                <span class="quick-info-item">Qty: ${item.quantityShipped}</span>
+                                <span class="quick-info-item">Cost: $${item.caseCost.toFixed(2)}</span>
+                                ${item.portionSize ? `<span class="quick-info-item portion">📏 ${this.formatPortionSize(item.portionSize, item.portionUnit)}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="item-header-actions">
+                            ${statusBadge}
+                            <button class="btn-icon expand-btn" data-expanded="false">
+                                <span class="expand-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="item-details-panel" style="display: none;">
+                        ${this.renderItemEditingForm(item, match, index)}
+                    </div>
+                </div>
+            `;
+        });
+        
+        return html || '<div class="no-items">No items to display</div>';
+    }
+
+    /**
+     * Enhanced renderItemEditingForm - comprehensive editing interface
+     */
+    renderItemEditingForm(item, match, index) {
+        const matchInfo = match.matchedItem ? `
+            <div class="match-info">
+                <h5>📋 Matched to existing item:</h5>
+                <p class="matched-item-name">${this.escapeHtml(match.matchedItem.name)}</p>
+                <p class="match-confidence">Confidence: ${Math.round(match.confidence * 100)}%</p>
+                <div class="match-actions">
+                    <button class="btn-warning btn-sm" onclick="unmatchItem(${index})">🔄 Unmatch</button>
+                    <button class="btn-info btn-sm" onclick="searchMatches(${index})">🔍 Find Other Matches</button>
+                </div>
+            </div>
+        ` : '';
+        
+        return `
+            <div class="item-edit-form">
+                ${matchInfo}
+                
+                <div class="form-sections">
+                    <!-- Basic Information -->
+                    <div class="form-section">
+                        <h5 class="section-title">📦 Basic Information</h5>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="name-${index}">Item Name *</label>
+                                <input type="text" 
+                                       id="name-${index}"
+                                       class="form-control" 
+                                       data-field="name" 
+                                       data-index="${index}"
+                                       value="${this.escapeHtml(item.name)}" 
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="vendorSKU-${index}">Vendor SKU</label>
+                                <input type="text" 
+                                       id="vendorSKU-${index}"
+                                       class="form-control" 
+                                       data-field="vendorSKU" 
+                                       data-index="${index}"
+                                       value="${item.vendorSKU}">
+                            </div>
+                            <div class="form-group">
+                                <label for="brand-${index}">Brand</label>
+                                <input type="text" 
+                                       id="brand-${index}"
+                                       class="form-control" 
+                                       data-field="brand" 
+                                       data-index="${index}"
+                                       value="${item.brand || ''}"
+                                       placeholder="Enter brand name">
+                            </div>
+                            <div class="form-group">
+                                <label for="category-${index}">Category *</label>
+                                <select id="category-${index}" class="form-control" data-field="category" data-index="${index}" required>
+                                    ${this.getCategoryOptions(item.category)}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pack Size Information -->
+                    <div class="form-section">
+                        <h5 class="section-title">📏 Pack Size & Units</h5>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="unitsPerCase-${index}">Units per Case *</label>
+                                <input type="number" 
+                                       id="unitsPerCase-${index}"
+                                       class="form-control" 
+                                       data-field="unitsPerCase" 
+                                       data-index="${index}"
+                                       value="${item.unitsPerCase}" 
+                                       min="1" 
+                                       step="1" 
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sizePerUnit-${index}">Size per Unit *</label>
+                                <input type="number" 
+                                       id="sizePerUnit-${index}"
+                                       class="form-control" 
+                                       data-field="sizePerUnit" 
+                                       data-index="${index}"
+                                       value="${item.sizePerUnit}" 
+                                       min="0.01" 
+                                       step="0.01" 
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="unitType-${index}">Unit Type *</label>
+                                <select id="unitType-${index}" class="form-control" data-field="unitType" data-index="${index}" required>
+                                    ${this.getUnitTypeOptions(item.unitType)}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pricing Information -->
+                    <div class="form-section">
+                        <h5 class="section-title">💰 Pricing</h5>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="caseCost-${index}">Case Cost *</label>
+                                <div class="input-group">
+                                    <span class="input-prefix">$</span>
+                                    <input type="number" 
+                                           id="caseCost-${index}"
+                                           class="form-control" 
+                                           data-field="caseCost" 
+                                           data-index="${index}"
+                                           value="${item.caseCost}" 
+                                           min="0" 
+                                           step="0.01" 
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="unitCost-${index}">Unit Cost (calculated)</label>
+                                <div class="input-group">
+                                    <span class="input-prefix">$</span>
+                                    <input type="number" 
+                                           id="unitCost-${index}"
+                                           class="form-control calculated" 
+                                           data-field="unitCost" 
+                                           data-index="${index}"
+                                           value="${item.unitCost.toFixed(4)}" 
+                                           readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quantity Information -->
+                    <div class="form-section">
+                        <h5 class="section-title">📊 Quantities</h5>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="quantityShipped-${index}">Quantity Shipped *</label>
+                                <input type="number" 
+                                       id="quantityShipped-${index}"
+                                       class="form-control" 
+                                       data-field="quantityShipped" 
+                                       data-index="${index}"
+                                       value="${item.quantityShipped}" 
+                                       min="0" 
+                                       step="0.01" 
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="par-${index}">Par Level</label>
+                                <input type="number" 
+                                       id="par-${index}"
+                                       class="form-control" 
+                                       data-field="par" 
+                                       data-index="${index}"
+                                       value="${item.par}" 
+                                       min="0" 
+                                       step="0.01"
+                                       placeholder="Target inventory level">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location Information -->
+                    <div class="form-section">
+                        <h5 class="section-title">📍 Location</h5>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="location-${index}">Storage Location</label>
+                                <input type="text" 
+                                       id="location-${index}"
+                                       class="form-control" 
+                                       data-field="location" 
+                                       data-index="${index}"
+                                       value="${item.location || ''}" 
+                                       placeholder="e.g., Walk-in Cooler Shelf 2">
+                            </div>
+                            <div class="form-group">
+                                <label for="area-${index}">Area</label>
+                                <select id="area-${index}" class="form-control" data-field="area" data-index="${index}">
+                                    ${this.getAreaOptions(item.area)}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional Information -->
+                    <div class="form-section">
+                        <h5 class="section-title">📝 Additional Information</h5>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="notes-${index}">General Notes</label>
+                                <textarea id="notes-${index}"
+                                          class="form-control" 
+                                          data-field="notes" 
+                                          data-index="${index}"
+                                          rows="2" 
+                                          placeholder="Any additional notes about this item...">${item.notes || ''}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item Actions -->
+                <div class="item-actions">
+                    <div class="action-group">
+                        <button class="btn-secondary btn-sm" onclick="resetItemData(${index})" title="Reset to original imported data">
+                            🔄 Reset
+                        </button>
+                        <button class="btn-secondary btn-sm" onclick="duplicateItem(${index})" title="Create a copy of this item">
+                            📋 Duplicate
+                        </button>
+                    </div>
+                    <div class="action-group">
+                        <button class="btn-danger btn-sm" onclick="removeItem(${index})" title="Remove from import">
+                            🗑 Remove from Import
+                        </button>
+                        ${match.matchedItem ? 
+                            `<button class="btn-warning btn-sm" onclick="unmatchItem(${index})" title="Create as new item instead">
+                                🔄 Create as New
+                            </button>` : 
+                            `<button class="btn-info btn-sm" onclick="searchMatches(${index})" title="Search for potential matches">
+                                🔍 Find Matches
+                            </button>`
+                        }
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Setup all enhanced event listeners
+     */
+    setupEnhancedEventListeners() {
+        // View toggle handlers
+        document.querySelectorAll('.btn-toggle').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.filterItemsByView(e.target.dataset.view);
+            });
+        });
+        
+        // Bulk action handlers
+        document.getElementById('expand-all-btn')?.addEventListener('click', () => this.expandAllItems());
+        document.getElementById('collapse-all-btn')?.addEventListener('click', () => this.collapseAllItems());
+        document.getElementById('auto-fill-btn')?.addEventListener('click', () => this.autoFillMissingData());
+        document.getElementById('validate-all-btn')?.addEventListener('click', () => this.validateAllItems());
+        document.getElementById('save-draft-btn')?.addEventListener('click', () => this.saveDraft());
+        document.getElementById('apply-import-btn')?.addEventListener('click', () => this.applyImport());
+        
+        // Real-time field editing with debouncing
+        let updateTimeout;
+        document.addEventListener('input', (e) => {
+            if (e.target.dataset.field && e.target.dataset.index !== undefined) {
+                clearTimeout(updateTimeout);
+                updateTimeout = setTimeout(() => {
+                    this.updateItemField(e.target.dataset.index, e.target.dataset.field, e.target.value);
+                }, 300); // Debounce updates
+            }
+        });
+        
+        // Real-time cost calculation
+        document.addEventListener('input', (e) => {
+            if (['caseCost', 'unitsPerCase', 'sizePerUnit'].includes(e.target.dataset.field)) {
+                this.recalculateUnitCost(e.target.dataset.index);
+            }
+        });
     }
 
     /**
@@ -721,123 +1144,6 @@ class InvoiceImportController {
     }
 
     /**
-     * Enhanced alternative parsing method for Ben E. Keith data - handles edge cases with security
-     */
-    parseAlternativeBenEKeith(itemDataText) {
-        // Redirect to secure method
-        return this.parseAlternativeBenEKeithSecure(itemDataText);
-    }
-
-    /**
-     * Parse a complete item line (ENHANCED for fraction handling)
-     */
-    parseItemLineSecure(itemNo, line) {
-        // Enhanced patterns for Ben E. Keith line parsing with fraction support
-        // Format: [Route] [Qty] [ItemNo] [Brand] [MfgCode] [PackSize] [Description] [UnitPrice] [ExtendedPrice]
-        const linePatterns = [
-            // Main pattern with fraction support in descriptions
-            /(\w{6,7})\s+(\d+)\s+(\d{6})\s+([A-Z\/]{3,8})\s+(\w+)\s+(\d+\/\d+\.?\d*|\d+\/\d+)\s+([A-Z]{2,3})\s+(.+?)\s+(\d+\.\d{2})\s+(\d+\.\d{2})/,
-            // Alternative pattern for complex descriptions with fractions
-            /(\w{6,7})\s+(\d+)\s+(\d{6})\s+([A-Z\/]{3,8})\s+(\w+)\s+(\d+\/\d+\.?\d*)\s*([A-Z]{2,3})\s+(.+?)\s+(\d+\.\d{2})\s+(\d+\.\d{2})/,
-            // Specific pattern for items with "1/4" in description - more greedy description capture
-            /(\w{6,7})\s+(\d+)\s+(\d{6})\s+([A-Z\/]{3,8})\s+(\w+)\s+(\d+\/\d+\.?\d*|\d+\/\d+)\s+([A-Z]{2,3})\s+([A-Z\s\/\d]+)\s+(\d+\.\d{2})\s+(\d+\.\d{2})/,
-            // Fallback pattern
-            /(\w{6,7})\s+(\d+)\s+(\d{6})\s+([A-Z\/&]{3,10})\s+(\w+)\s+(.+?)\s+(\d+\.\d{2})\s+(\d+\.\d{2})/
-        ];
-        
-        for (let i = 0; i < linePatterns.length; i++) {
-            const match = line.match(linePatterns[i]);
-            if (match && match.length >= 8) {
-                
-                if (match.length >= 9) {
-                    const [, route, quantity, matchedItemNo, brand, mfgCode, packSize, unit, description, unitPrice] = match;
-                    
-                    if (matchedItemNo === itemNo) {
-                        return {
-                            vendorSKU: itemNo,
-                            name: description.trim().replace(/\s+/g, ' '),
-                            brand: brand,
-                            packSizeString: `${packSize} ${unit}`,
-                            quantityString: quantity,
-                            priceString: unitPrice
-                        };
-                    }
-                } else {
-                    const [, route, quantity, matchedItemNo, brand, mfgCode, description, unitPrice] = match;
-                    
-                    if (matchedItemNo === itemNo) {
-                        // Extract pack size from description if possible
-                        const packSizeMatch = description.match(/(\d+\/\d+\.?\d*\s*[A-Z]{2,3})/);
-                        const packSize = packSizeMatch ? packSizeMatch[1] : '1/1 OZ';
-                        const cleanDescription = description.replace(/\d+\/\d+\.?\d*\s*[A-Z]{2,3}/, '').trim();
-                        
-                        return {
-                            vendorSKU: itemNo,
-                            name: cleanDescription.replace(/\s+/g, ' '),
-                            brand: brand,
-                            packSizeString: packSize,
-                            quantityString: quantity,
-                            priceString: unitPrice
-                        };
-                    }
-                }
-            }
-        }
-        
-        return null;
-    }
-
-    /**
-     * Parse an individual item section (SECURE VERSION)
-     */
-    parseItemSection(itemNo, section) {
-        // SECURITY: Parse without logging sensitive section content
-        
-        // Look for brand (3-8 uppercase letters after item number)
-        const brandMatch = section.match(new RegExp(`${itemNo}\\s+([A-Z]{3,8})`));
-        const brand = brandMatch ? brandMatch[1] : '';
-        
-        // Look for pack size (number/number unit or number unit)
-        const packSizeMatch = section.match(/(\d+\/\d+\.?\d*\s*[A-Z]{2,3}|\d+\s*[A-Z]{2,3})/);
-        const packSize = packSizeMatch ? packSizeMatch[1] : '';
-        
-        // Look for price (XX.XX format)
-        const priceMatches = section.match(/(\d+\.\d{2})/g);
-        const price = priceMatches ? priceMatches[0] : '';
-        
-        // Look for quantity (number before item number)
-        const quantityMatch = section.match(new RegExp(`(\\d+)\\s+${itemNo}`));
-        const quantity = quantityMatch ? quantityMatch[1] : '1';
-        
-        // Extract description (words between pack size and price)
-        let description = '';
-        if (packSize && price) {
-            const packIndex = section.indexOf(packSize);
-            const priceIndex = section.indexOf(price);
-            if (packIndex !== -1 && priceIndex !== -1 && priceIndex > packIndex) {
-                const descSection = section.substring(packIndex + packSize.length, priceIndex).trim();
-                // Clean up the description
-                description = descSection.replace(/\s+/g, ' ').trim();
-            }
-        }
-        
-        if (!description || !price) {
-            // SECURITY: Don't log section content
-            console.warn(`⚠️ Incomplete data for item ${itemNo} (section content not logged for security)`);
-            return null;
-        }
-        
-        return {
-            vendorSKU: itemNo,
-            name: description,
-            brand: brand,
-            packSizeString: packSize,
-            quantityString: quantity,
-            priceString: price
-        };
-    }
-
-    /**
      * Create a standardized Ben E. Keith item from parsed data (SECURE - only stores inventory data)
      */
     createBenEKeithItem(data) {
@@ -883,7 +1189,6 @@ class InvoiceImportController {
             onHand: 0.0,
             location: '',
             area: '',
-            forEvent: false,
             wasteEntryUnit: packSizeData.unitType || 'OZ',
             notes: '',
             reorderPoint: null,
@@ -952,24 +1257,6 @@ class InvoiceImportController {
         return { unitsPerCase: 1, sizePerUnit: 1, unitType: 'OZ' };
     }
 
-    /**
-     * Extract invoice number from PDF text (redirects to secure method)
-     */
-    extractInvoiceNumber(pdfText) {
-        return this.extractInvoiceNumberSecure(pdfText);
-    }
-
-    /**
-     * Enhanced invoice date extraction from PDF text (redirects to secure method)
-     */
-    extractInvoiceDate(pdfText) {
-        return this.extractInvoiceDateSecure(pdfText);
-    }
-
-    // ========================================================================
-    // EXISTING CUSTOMERFIRST AND CORE FUNCTIONALITY (UNCHANGED)
-    // ========================================================================
-
     async extractFromCustomerFirstCSV(file) {
         const content = await this.readFileAsText(file);
         const lines = content.split('\n').filter(line => line.trim());
@@ -1029,7 +1316,6 @@ class InvoiceImportController {
                 onHand: 0.0,
                 location: '',
                 area: '',
-                forEvent: false,
                 wasteEntryUnit: packSizeData.unitType || 'OZ',
                 notes: '',
                 reorderPoint: null,
@@ -1177,164 +1463,6 @@ class InvoiceImportController {
         summary.portionsParsed = this.importData.extractedItems.filter(item => 
             item.portionSize && item.portionSize > 0
         ).length;
-    }
-
-    showReviewInterface() {
-        const summary = this.importData.summary;
-        
-        const content = `
-            <div class="import-review-container">
-                <div class="review-header">
-                    <h2>📋 Review Import - ${this.importData.vendor}</h2>
-                    <div class="import-summary">
-                        <div class="summary-stat">
-                            <span class="stat-number">${summary.totalItems}</span>
-                            <span class="stat-label">Total Items</span>
-                        </div>
-                        <div class="summary-stat success">
-                            <span class="stat-number">${summary.autoMatched}</span>
-                            <span class="stat-label">Auto-Matched</span>
-                        </div>
-                        <div class="summary-stat warning">
-                            <span class="stat-number">${summary.needsReview}</span>
-                            <span class="stat-label">Need Review</span>
-                        </div>
-                        <div class="summary-stat info">
-                            <span class="stat-number">${summary.newItems}</span>
-                            <span class="stat-label">New Items</span>
-                        </div>
-                        <div class="summary-stat portion">
-                            <span class="stat-number">${summary.portionsParsed}</span>
-                            <span class="stat-label">Portions Detected</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="review-content">
-                    ${this.renderAutoApprovedItems()}
-                    ${this.renderReviewItems()}
-                    ${this.renderNewItems()}
-                </div>
-                
-                <div class="review-actions">
-                    <button class="btn-secondary" onclick="window.location.reload()">Cancel</button>
-                    <button class="btn-primary" id="apply-import-btn">Apply Import</button>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('app-content').innerHTML = content;
-    }
-
-    renderAutoApprovedItems() {
-        const autoApproved = this.importData.matchResults.filter(m => !m.requiresReview && !m.isNewItem);
-        if (autoApproved.length === 0) return '';
-        
-        const itemsHtml = autoApproved.map(match => `
-            <div class="review-item approved">
-                <div class="item-info">
-                    <h4>${match.extractedItem.name}</h4>
-                    <div class="item-details">
-                        <span class="detail-item">SKU: ${match.extractedItem.vendorSKU}</span>
-                        <span class="detail-item">Qty: ${match.extractedItem.quantityShipped}</span>
-                        <span class="detail-item">Cost: $${match.extractedItem.caseCost.toFixed(2)}</span>
-                        ${match.extractedItem.portionSize ? 
-                            `<span class="detail-item portion-highlight">📏 ${formatPortionSize(match.extractedItem.portionSize, match.extractedItem.portionUnit)}</span>` : 
-                            ''
-                        }
-                    </div>
-                </div>
-                <div class="match-status">
-                    <span class="status-badge success">✓ Auto-Matched</span>
-                    <div class="match-details">→ ${match.matchedItem.name}</div>
-                </div>
-            </div>
-        `).join('');
-        
-        return `
-            <div class="review-section">
-                <h3 class="section-title success">🟢 Auto-Approved (${autoApproved.length} items)</h3>
-                <div class="review-items">
-                    ${itemsHtml}
-                </div>
-            </div>
-        `;
-    }
-
-    renderReviewItems() {
-        const needsReview = this.importData.matchResults.filter(m => m.requiresReview);
-        if (needsReview.length === 0) return '';
-        
-        const itemsHtml = needsReview.map((match, index) => `
-            <div class="review-item needs-review">
-                <div class="item-info">
-                    <h4>${match.extractedItem.name}</h4>
-                    <div class="item-details">
-                        <span class="detail-item">SKU: ${match.extractedItem.vendorSKU}</span>
-                        <span class="detail-item">Qty: ${match.extractedItem.quantityShipped}</span>
-                        <span class="detail-item">Cost: $${match.extractedItem.caseCost.toFixed(2)}</span>
-                        ${match.extractedItem.portionSize ? 
-                            `<span class="detail-item portion-highlight">📏 ${formatPortionSize(match.extractedItem.portionSize, match.extractedItem.portionUnit)}</span>` : 
-                            ''
-                        }
-                    </div>
-                </div>
-                <div class="match-options">
-                    <div class="suggested-match">
-                        <strong>Suggested Match (${Math.round(match.confidence * 100)}%):</strong>
-                        <div>${match.matchedItem ? match.matchedItem.name : 'No match found'}</div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn-success accept-match-btn" data-item-index="${index}">Accept Match</button>
-                        <button class="btn-primary create-new-btn" data-item-index="${index}">Create New</button>
-                        <button class="btn-secondary skip-item-btn" data-item-index="${index}">Skip</button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-        
-        return `
-            <div class="review-section">
-                <h3 class="section-title warning">🟡 Needs Review (${needsReview.length} items)</h3>
-                <div class="review-items">
-                    ${itemsHtml}
-                </div>
-            </div>
-        `;
-    }
-
-    renderNewItems() {
-        const newItems = this.importData.matchResults.filter(m => m.isNewItem);
-        if (newItems.length === 0) return '';
-        
-        const itemsHtml = newItems.map(match => `
-            <div class="review-item new-item">
-                <div class="item-info">
-                    <h4>${match.extractedItem.name}</h4>
-                    <div class="item-details">
-                        <span class="detail-item">SKU: ${match.extractedItem.vendorSKU}</span>
-                        <span class="detail-item">Qty: ${match.extractedItem.quantityShipped}</span>
-                        <span class="detail-item">Cost: $${match.extractedItem.caseCost.toFixed(2)}</span>
-                        ${match.extractedItem.portionSize ? 
-                            `<span class="detail-item portion-highlight">📏 ${formatPortionSize(match.extractedItem.portionSize, match.extractedItem.portionUnit)}</span>` : 
-                            ''
-                        }
-                    </div>
-                </div>
-                <div class="new-item-badge">
-                    <span class="status-badge new">+ New Item</span>
-                </div>
-            </div>
-        `).join('');
-        
-        return `
-            <div class="review-section">
-                <h3 class="section-title info">🔵 New Items (${newItems.length} items)</h3>
-                <div class="review-items">
-                    ${itemsHtml}
-                </div>
-            </div>
-        `;
     }
 
     async applyImport() {
@@ -1496,6 +1624,1431 @@ class InvoiceImportController {
         this.updateImportSummary();
         this.showReviewInterface();
     }
+
+    // ========================================================================
+    // ENHANCED FUNCTIONALITY - NEW METHODS
+    // ========================================================================
+
+    /**
+     * Filter items by view type
+     */
+    filterItemsByView(viewType) {
+        const items = document.querySelectorAll('.enhanced-item');
+        items.forEach(item => {
+            if (viewType === 'all' || item.dataset.viewType === viewType) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    /**
+     * Expand all items in the review interface
+     */
+    expandAllItems() {
+        document.querySelectorAll('.enhanced-item').forEach((item, index) => {
+            const panel = item.querySelector('.item-details-panel');
+            const btn = item.querySelector('.expand-btn');
+            const icon = btn.querySelector('.expand-icon');
+            
+            panel.style.display = 'block';
+            btn.dataset.expanded = 'true';
+            icon.textContent = '▲';
+        });
+    }
+
+    /**
+     * Collapse all items in the review interface
+     */
+    collapseAllItems() {
+        document.querySelectorAll('.enhanced-item').forEach((item, index) => {
+            const panel = item.querySelector('.item-details-panel');
+            const btn = item.querySelector('.expand-btn');
+            const icon = btn.querySelector('.expand-icon');
+            
+            panel.style.display = 'none';
+            btn.dataset.expanded = 'false';
+            icon.textContent = '▼';
+        });
+    }
+
+    /**
+     * Auto-fill missing data using intelligent defaults and patterns
+     */
+    autoFillMissingData() {
+        this.showProcessing('Auto-filling missing data...');
+        
+        let fillCount = 0;
+        const fillLog = [];
+        
+        this.importData.matchResults.forEach((match, index) => {
+            const item = match.extractedItem;
+            let itemFillCount = 0;
+            
+            // Auto-fill category based on name patterns
+            if (!item.category || item.category === 'Unknown') {
+                const category = this.detectCategoryFromName(item.name);
+                if (category !== 'Unknown') {
+                    item.category = category;
+                    itemFillCount++;
+                    fillLog.push(`${item.name}: Category → ${category}`);
+                }
+            }
+            
+            // Auto-fill area based on category
+            if (!item.area && item.category && item.category !== 'Unknown') {
+                const area = this.getDefaultAreaForCategory(item.category);
+                if (area) {
+                    item.area = area;
+                    itemFillCount++;
+                    fillLog.push(`${item.name}: Area → ${area}`);
+                }
+            }
+            
+            // Auto-fill default par level based on item type and cost
+            if (!item.par || item.par === 0) {
+                const suggestedPar = this.calculateSuggestedPar(item);
+                if (suggestedPar > 0) {
+                    item.par = suggestedPar;
+                    itemFillCount++;
+                    fillLog.push(`${item.name}: Par Level → ${suggestedPar}`);
+                }
+            }
+            
+            // Auto-fill location based on category
+            if (!item.location && item.category) {
+                const location = this.getDefaultLocationForCategory(item.category);
+                if (location) {
+                    item.location = location;
+                    itemFillCount++;
+                    fillLog.push(`${item.name}: Location → ${location}`);
+                }
+            }
+            
+            fillCount += itemFillCount;
+        });
+        
+        // Show results
+        setTimeout(() => {
+            this.showAutoFillResults(fillCount, fillLog);
+            this.showReviewInterface(); // Refresh the interface
+        }, 1000);
+    }
+
+    /**
+     * Detect category from item name using patterns
+     */
+    detectCategoryFromName(name) {
+        const categoryPatterns = {
+            'Produce': [
+                'lettuce', 'tomato', 'onion', 'potato', 'carrot', 'celery', 'pepper',
+                'apple', 'banana', 'orange', 'lemon', 'lime', 'berry', 'grape',
+                'mushroom', 'spinach', 'cabbage', 'broccoli', 'cauliflower', 'avocado'
+            ],
+            'Meat': [
+                'beef', 'chicken', 'pork', 'turkey', 'lamb', 'veal', 'ground',
+                'steak', 'roast', 'chop', 'breast', 'thigh', 'wing', 'bacon',
+                'ham', 'sausage', 'brisket', 'ribs'
+            ],
+            'Seafood': [
+                'fish', 'salmon', 'tuna', 'cod', 'halibut', 'shrimp', 'crab',
+                'lobster', 'scallop', 'oyster', 'mussel', 'clam', 'tilapia',
+                'mahi', 'snapper', 'catfish'
+            ],
+            'Dairy': [
+                'milk', 'cheese', 'butter', 'cream', 'yogurt', 'sour cream',
+                'cottage cheese', 'cheddar', 'mozzarella', 'parmesan', 'swiss',
+                'blue cheese', 'cream cheese'
+            ],
+            'Pantry': [
+                'flour', 'sugar', 'salt', 'pepper', 'oil', 'vinegar', 'rice',
+                'pasta', 'bread', 'cereal', 'beans', 'sauce', 'spice',
+                'herb', 'vanilla', 'baking', 'stock', 'broth'
+            ],
+            'Frozen': [
+                'frozen', 'ice cream', 'sorbet', 'frozen vegetable', 'frozen fruit',
+                'pizza', 'ice', 'popsicle'
+            ],
+            'Beverages': [
+                'juice', 'soda', 'water', 'coffee', 'tea', 'wine', 'beer',
+                'cocktail', 'syrup', 'mixer', 'cola', 'sprite', 'energy drink'
+            ],
+            'Condiments': [
+                'ketchup', 'mustard', 'mayo', 'dressing', 'sauce', 'marinade',
+                'seasoning', 'hot sauce', 'bbq', 'ranch', 'italian'
+            ]
+        };
+        
+        const nameLower = name.toLowerCase();
+        
+        for (const [category, patterns] of Object.entries(categoryPatterns)) {
+            if (patterns.some(pattern => nameLower.includes(pattern))) {
+                return category;
+            }
+        }
+        
+        return 'Unknown';
+    }
+
+    /**
+     * Get default area for category
+     */
+    getDefaultAreaForCategory(category) {
+        const categoryAreas = {
+            'Produce': 'Walk-in Cooler',
+            'Meat': 'Walk-in Cooler',
+            'Seafood': 'Walk-in Cooler',
+            'Dairy': 'Walk-in Cooler',
+            'Frozen': 'Walk-in Freezer',
+            'Pantry': 'Dry Storage',
+            'Beverages': 'Dry Storage',
+            'Condiments': 'Dry Storage'
+        };
+        
+        return categoryAreas[category] || '';
+    }
+
+    /**
+     * Get default location for category
+     */
+    getDefaultLocationForCategory(category) {
+        const categoryLocations = {
+            'Produce': 'Produce Cooler',
+            'Meat': 'Meat Cooler',
+            'Seafood': 'Seafood Cooler',
+            'Dairy': 'Dairy Cooler',
+            'Frozen': 'Freezer',
+            'Pantry': 'Dry Storage Shelves',
+            'Beverages': 'Beverage Storage',
+            'Condiments': 'Condiment Storage'
+        };
+        
+        return categoryLocations[category] || '';
+    }
+
+    /**
+     * Calculate suggested par level
+     */
+    calculateSuggestedPar(item) {
+        // Basic par calculation based on cost and category
+        const costBasedPar = item.caseCost < 20 ? 3 : item.caseCost < 50 ? 2 : 1;
+        
+        const categoryMultipliers = {
+            'Produce': 1.5,    // Higher turnover
+            'Meat': 1.2,       // Moderate turnover
+            'Seafood': 1.0,    // Lower turnover, higher cost
+            'Dairy': 1.3,      // Moderate-high turnover
+            'Frozen': 1.0,     // Lower turnover
+            'Pantry': 2.0,     // High turnover, stable
+            'Beverages': 1.5,  // High turnover
+            'Condiments': 1.0  // Low turnover
+        };
+        
+        const multiplier = categoryMultipliers[item.category] || 1.0;
+        return Math.max(1, Math.round(costBasedPar * multiplier));
+    }
+
+    /**
+     * Show auto-fill results
+     */
+    showAutoFillResults(fillCount, fillLog) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🪄 Auto-Fill Complete</h3>
+                    <button class="btn-close" onclick="this.closest('.modal-overlay').remove()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="auto-fill-summary">
+                        <div class="fill-stat">
+                            <span class="fill-number">${fillCount}</span>
+                            <span class="fill-label">Fields Filled</span>
+                        </div>
+                    </div>
+                    
+                    ${fillLog.length > 0 ? `
+                        <div class="fill-log">
+                            <h4>Changes Made:</h4>
+                            <div class="fill-log-items">
+                                ${fillLog.slice(0, 10).map(entry => `<div class="log-item">${entry}</div>`).join('')}
+                                ${fillLog.length > 10 ? `<div class="log-item more">... and ${fillLog.length - 10} more</div>` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="this.closest('.modal-overlay').remove()">Continue</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+    }
+
+    /**
+     * Validate all items and show results
+     */
+    validateAllItems() {
+        const validationResults = [];
+        
+        this.importData.matchResults.forEach((match, index) => {
+            const item = match.extractedItem;
+            const errors = [];
+            const warnings = [];
+            
+            // Required field validation
+            if (!item.name || item.name.trim() === '') {
+                errors.push('Item name is required');
+            }
+            if (!item.unitsPerCase || item.unitsPerCase <= 0) {
+                errors.push('Units per case must be greater than 0');
+            }
+            if (!item.sizePerUnit || item.sizePerUnit <= 0) {
+                errors.push('Size per unit must be greater than 0');
+            }
+            if (!item.unitType || item.unitType === '') {
+                errors.push('Unit type is required');
+            }
+            if (!item.caseCost || item.caseCost < 0) {
+                errors.push('Case cost must be 0 or greater');
+            }
+            if (!item.quantityShipped || item.quantityShipped < 0) {
+                errors.push('Quantity shipped must be 0 or greater');
+            }
+            
+            // Warning validations
+            if (!item.brand || item.brand === '') {
+                warnings.push('Brand is not specified');
+            }
+            if (!item.category || item.category === 'Unknown') {
+                warnings.push('Category not specified');
+            }
+            if (!item.location || item.location === '') {
+                warnings.push('Storage location not specified');
+            }
+            if (item.portionSize && item.portionParseConfidence < 0.8) {
+                warnings.push('Portion size detection has low confidence');
+            }
+            
+            validationResults.push({
+                index,
+                item: item.name,
+                errors,
+                warnings,
+                isValid: errors.length === 0
+            });
+        });
+        
+        this.showValidationResults(validationResults);
+    }
+
+    /**
+     * Show validation results
+     */
+    showValidationResults(results) {
+        const errorCount = results.filter(r => r.errors.length > 0).length;
+        const warningCount = results.filter(r => r.warnings.length > 0).length;
+        
+        let html = `
+            <div class="validation-summary">
+                <h4>Validation Results</h4>
+                <div class="validation-stats">
+                    <span class="stat ${errorCount === 0 ? 'success' : 'error'}">
+                        ${errorCount} Errors
+                    </span>
+                    <span class="stat warning">
+                        ${warningCount} Warnings
+                    </span>
+                    <span class="stat info">
+                        ${results.filter(r => r.isValid && r.warnings.length === 0).length} Clean Items
+                    </span>
+                </div>
+            </div>
+        `;
+        
+        if (errorCount > 0 || warningCount > 0) {
+            html += '<div class="validation-details">';
+            
+            results.forEach(result => {
+                if (result.errors.length > 0 || result.warnings.length > 0) {
+                    html += `
+                        <div class="validation-item ${result.errors.length > 0 ? 'has-errors' : 'has-warnings'}">
+                            <div class="validation-item-header">
+                                <span class="item-name">${result.item}</span>
+                                <button class="btn-link" onclick="scrollToItem(${result.index})">View Item</button>
+                            </div>
+                    `;
+                    
+                    if (result.errors.length > 0) {
+                        html += '<ul class="error-list">';
+                        result.errors.forEach(error => {
+                            html += `<li class="error">❌ ${error}</li>`;
+                        });
+                        html += '</ul>';
+                    }
+                    
+                    if (result.warnings.length > 0) {
+                        html += '<ul class="warning-list">';
+                        result.warnings.forEach(warning => {
+                            html += `<li class="warning">⚠️ ${warning}</li>`;
+                        });
+                        html += '</ul>';
+                    }
+                    
+                    html += '</div>';
+                }
+            });
+            
+            html += '</div>';
+        } else {
+            html += '<div class="validation-success">✅ All items passed validation!</div>';
+        }
+        
+        const validationContainer = document.getElementById('validation-results');
+        validationContainer.innerHTML = html;
+        validationContainer.style.display = 'block';
+        validationContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /**
+     * Save current state as draft
+     */
+    saveDraft() {
+        try {
+            const draftData = {
+                vendor: this.importData.vendor,
+                fileName: this.importData.fileName,
+                invoiceNumber: this.importData.invoiceNumber,
+                invoiceDate: this.importData.invoiceDate,
+                matchResults: this.importData.matchResults,
+                timestamp: new Date().toISOString(),
+                id: crypto.randomUUID()
+            };
+            
+            // Save to localStorage (in real app, this would go to a proper database)
+            const drafts = JSON.parse(localStorage.getItem('importDrafts') || '[]');
+            drafts.unshift(draftData);
+            
+            // Keep only last 10 drafts
+            if (drafts.length > 10) {
+                drafts.splice(10);
+            }
+            
+            localStorage.setItem('importDrafts', JSON.stringify(drafts));
+            
+            this.showNotification('Draft saved successfully!', 'success');
+            
+        } catch (error) {
+            console.error('Failed to save draft:', error);
+            this.showNotification('Failed to save draft', 'error');
+        }
+    }
+
+    /**
+     * Update item field value
+     */
+    updateItemField(index, field, value) {
+        const item = this.importData.matchResults[index].extractedItem;
+        
+        // Handle different data types
+        if (['unitsPerCase', 'sizePerUnit', 'portionSize', 'caseCost', 'unitCost', 'quantityOrdered', 'quantityShipped', 'onHand', 'par'].includes(field)) {
+            item[field] = parseFloat(value) || 0;
+        } else if (field === 'isActive') {
+            item[field] = value === 'true';
+        } else {
+            item[field] = value;
+        }
+        
+        // Update header display
+        this.updateItemHeaderDisplay(index);
+    }
+
+    /**
+     * Recalculate unit cost when related fields change
+     */
+    recalculateUnitCost(index) {
+        const item = this.importData.matchResults[index].extractedItem;
+        
+        if (item.unitsPerCase > 0 && item.sizePerUnit > 0 && item.caseCost > 0) {
+            const totalUnitsPerCase = item.unitsPerCase * item.sizePerUnit;
+            item.unitCost = item.caseCost / totalUnitsPerCase;
+            
+            // Update the unit cost display
+            const unitCostInput = document.querySelector(`[data-field="unitCost"][data-index="${index}"]`);
+            if (unitCostInput) {
+                unitCostInput.value = item.unitCost.toFixed(4);
+            }
+        }
+    }
+
+    /**
+     * Update item header display when data changes
+     */
+    updateItemHeaderDisplay(index) {
+        const item = this.importData.matchResults[index].extractedItem;
+        const itemElement = document.querySelector(`[data-item-index="${index}"]`);
+        
+        if (itemElement) {
+            // Update name
+            const nameElement = itemElement.querySelector('.item-name');
+            if (nameElement) {
+                nameElement.textContent = item.name;
+            }
+            
+            // Update quick info
+            const quickInfoElement = itemElement.querySelector('.item-quick-info');
+            if (quickInfoElement) {
+                quickInfoElement.innerHTML = `
+                    <span class="quick-info-item">SKU: ${item.vendorSKU}</span>
+                    <span class="quick-info-item">Qty: ${item.quantityShipped}</span>
+                    <span class="quick-info-item">Cost: $${item.caseCost.toFixed(2)}</span>
+                    ${item.portionSize ? `<span class="quick-info-item portion">📏 ${this.formatPortionSize(item.portionSize, item.portionUnit)}</span>` : ''}
+                `;
+            }
+        }
+    }
+
+    /**
+     * Show notification
+     */
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                <span class="notification-message">${message}</span>
+            </div>
+            <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+        `;
+        
+        // Add to page
+        let container = document.querySelector('.notification-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'notification-container';
+            document.body.appendChild(container);
+        }
+        
+        container.appendChild(notification);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+
+    /**
+     * Setup global functions for item management
+     */
+    setupGlobalItemFunctions() {
+        // Item expansion toggle
+        window.toggleItemExpansion = (index) => {
+            const item = document.querySelector(`[data-item-index="${index}"]`);
+            const panel = item.querySelector('.item-details-panel');
+            const btn = item.querySelector('.expand-btn');
+            const icon = btn.querySelector('.expand-icon');
+            
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                btn.dataset.expanded = 'true';
+                icon.textContent = '▲';
+                item.classList.add('expanded');
+            } else {
+                panel.style.display = 'none';
+                btn.dataset.expanded = 'false';
+                icon.textContent = '▼';
+                item.classList.remove('expanded');
+            }
+        };
+        
+        // Reset item data
+        window.resetItemData = (index) => {
+            if (confirm('Reset this item to its original imported values?')) {
+                // Implementation would restore original data
+                this.showNotification('Item data reset to original values', 'info');
+                this.showReviewInterface(); // Refresh display
+            }
+        };
+        
+        // Duplicate item
+        window.duplicateItem = (index) => {
+            const originalMatch = this.importData.matchResults[index];
+            const duplicatedItem = JSON.parse(JSON.stringify(originalMatch.extractedItem));
+            
+            // Modify duplicated item
+            duplicatedItem.name += ' (Copy)';
+            duplicatedItem.vendorSKU += '_COPY';
+            
+            // Add to import data
+            const newMatch = {
+                extractedItem: duplicatedItem,
+                matchType: 'new',
+                matchedItem: null,
+                confidence: 0,
+                requiresReview: false,
+                isNewItem: true
+            };
+            
+            this.importData.matchResults.push(newMatch);
+            this.updateImportSummary();
+            this.showReviewInterface();
+            this.showNotification('Item duplicated successfully', 'success');
+        };
+        
+        // Remove item
+        window.removeItem = (index) => {
+            if (confirm('Remove this item from the import? This cannot be undone.')) {
+                this.importData.matchResults.splice(index, 1);
+                this.updateImportSummary();
+                this.showReviewInterface();
+                this.showNotification('Item removed from import', 'info');
+            }
+        };
+        
+        // Unmatch item
+        window.unmatchItem = (index) => {
+            if (confirm('Create this as a new item instead of updating the existing match?')) {
+                this.importData.matchResults[index].isNewItem = true;
+                this.importData.matchResults[index].requiresReview = false;
+                this.importData.matchResults[index].matchedItem = null;
+                this.updateImportSummary();
+                this.showReviewInterface();
+                this.showNotification('Item will be created as new', 'info');
+            }
+        };
+        
+        // Search matches
+        window.searchMatches = (index) => {
+            this.showNotification('Search matches feature coming soon', 'info');
+        };
+
+        // Scroll to item
+        window.scrollToItem = (index) => {
+            const item = document.querySelector(`[data-item-index="${index}"]`);
+            if (item) {
+                item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                item.classList.add('highlight');
+                setTimeout(() => item.classList.remove('highlight'), 2000);
+            }
+        };
+    }
+
+    /**
+     * Add enhanced styles dynamically
+     */
+    addEnhancedStyles() {
+        if (document.querySelector('#enhanced-import-styles')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'enhanced-import-styles';
+        style.textContent = `
+            /* Enhanced Import Review Styles */
+            .import-review-container.enhanced {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 2rem;
+            }
+
+            .review-subtitle {
+                color: #666;
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+                text-align: center;
+            }
+
+            .review-controls {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 2rem;
+                padding: 1rem;
+                background: #f8f9fa;
+                border-radius: 8px;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .view-toggles {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .btn-toggle {
+                padding: 0.5rem 1rem;
+                border: 2px solid #ddd;
+                background: white;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+            }
+
+            .btn-toggle:hover {
+                border-color: #2196f3;
+                background: #f0f8ff;
+            }
+
+            .btn-toggle.active {
+                background: #2196f3;
+                color: white;
+                border-color: #2196f3;
+            }
+
+            .bulk-actions {
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+
+            .review-content.enhanced {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .enhanced-item {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                border: 2px solid transparent;
+                transition: all 0.3s ease;
+                animation: slideIn 0.3s ease-out;
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .enhanced-item:hover {
+                box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            }
+
+            .enhanced-item.highlight {
+                border-color: #ff9800;
+                animation: pulse 2s ease-in-out;
+            }
+
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.02); }
+            }
+
+            .enhanced-item.matched {
+                border-left: 4px solid #4caf50;
+            }
+
+            .enhanced-item.needs-review {
+                border-left: 4px solid #ff9800;
+            }
+
+            .enhanced-item.new-item {
+                border-left: 4px solid #2196f3;
+            }
+
+            .item-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.5rem;
+                cursor: pointer;
+                border-bottom: 1px solid #eee;
+                transition: background 0.2s ease;
+            }
+
+            .item-header:hover {
+                background: #f8f9fa;
+            }
+
+            .item-header-info {
+                flex: 1;
+            }
+
+            .item-name {
+                margin: 0 0 0.5rem 0;
+                font-size: 1.2rem;
+                font-weight: 600;
+                color: #333;
+            }
+
+            .item-quick-info {
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .quick-info-item {
+                font-size: 0.9rem;
+                color: #666;
+                background: #f5f5f5;
+                padding: 0.25rem 0.5rem;
+                border-radius: 4px;
+            }
+
+            .quick-info-item.portion {
+                background: #e1bee7;
+                color: #7b1fa2;
+                font-weight: 500;
+            }
+
+            .item-header-actions {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .btn-icon {
+                background: none;
+                border: none;
+                padding: 0.5rem;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .btn-icon:hover {
+                background: #f0f0f0;
+            }
+
+            .expand-icon {
+                font-size: 1.2rem;
+                transition: transform 0.2s ease;
+            }
+
+            .item-details-panel {
+                padding: 0 1.5rem 1.5rem 1.5rem;
+                background: #fafafa;
+                border-top: 1px solid #eee;
+            }
+
+            .item-edit-form {
+                background: white;
+                border-radius: 8px;
+                padding: 1.5rem;
+                margin-top: 1rem;
+            }
+
+            .match-info {
+                background: #e8f5e8;
+                padding: 1rem;
+                border-radius: 6px;
+                margin-bottom: 1.5rem;
+                border-left: 4px solid #4caf50;
+            }
+
+            .match-info h5 {
+                margin: 0 0 0.5rem 0;
+                color: #2e7d32;
+            }
+
+            .matched-item-name {
+                font-weight: 600;
+                color: #333;
+                margin: 0 0 0.25rem 0;
+            }
+
+            .match-confidence {
+                font-size: 0.9rem;
+                color: #666;
+                margin: 0;
+            }
+
+            .match-actions {
+                margin-top: 1rem;
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .form-sections {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .form-section {
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                padding: 1.5rem;
+                background: #fafafa;
+            }
+
+            .section-title {
+                margin: 0 0 1rem 0;
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #333;
+                padding-bottom: 0.5rem;
+                border-bottom: 2px solid #e0e0e0;
+            }
+
+            .form-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .form-group.full-width {
+                grid-column: 1 / -1;
+            }
+
+            .form-group label {
+                font-weight: 500;
+                color: #333;
+                margin-bottom: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .form-control {
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                font-size: 0.9rem;
+                transition: border-color 0.2s ease;
+                background: white;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #2196f3;
+                box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+            }
+
+            .form-control:required:invalid {
+                border-color: #f44336;
+            }
+
+            .form-control.calculated {
+                background: #f5f5f5;
+                color: #666;
+            }
+
+            .input-group {
+                position: relative;
+                display: flex;
+                align-items: center;
+            }
+
+            .input-prefix {
+                position: absolute;
+                left: 12px;
+                color: #666;
+                z-index: 1;
+                font-weight: 500;
+            }
+
+            .input-group .form-control {
+                padding-left: 2rem;
+            }
+
+            .item-actions {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 1.5rem;
+                padding-top: 1rem;
+                border-top: 1px solid #e0e0e0;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .action-group {
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+
+            .btn-sm {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                border-radius: 4px;
+                border: none;
+                cursor: pointer;
+                font-weight: 500;
+                transition: all 0.2s ease;
+            }
+
+            .btn-danger {
+                background: #f44336;
+                color: white;
+            }
+
+            .btn-danger:hover {
+                background: #d32f2f;
+            }
+
+            .btn-warning {
+                background: #ff9800;
+                color: white;
+            }
+
+            .btn-warning:hover {
+                background: #f57c00;
+            }
+
+            .btn-info {
+                background: #2196f3;
+                color: white;
+            }
+
+            .btn-info:hover {
+                background: #1976d2;
+            }
+
+            .review-actions.enhanced {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 2rem;
+                background: #f8f9fa;
+                border-radius: 8px;
+                margin-top: 2rem;
+                border: 2px solid #e0e0e0;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .import-validation {
+                margin-top: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+
+            .validation-summary {
+                padding: 1.5rem;
+                background: #f8f9fa;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .validation-summary h4 {
+                margin: 0 0 1rem 0;
+                color: #333;
+            }
+
+            .validation-stats {
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .validation-stats .stat {
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            .validation-stats .stat.success {
+                background: #e8f5e8;
+                color: #2e7d32;
+            }
+
+            .validation-stats .stat.error {
+                background: #ffebee;
+                color: #c62828;
+            }
+
+            .validation-stats .stat.warning {
+                background: #fff3e0;
+                color: #ef6c00;
+            }
+
+            .validation-stats .stat.info {
+                background: #e3f2fd;
+                color: #1565c0;
+            }
+
+            .validation-details {
+                max-height: 400px;
+                overflow-y: auto;
+                padding: 1rem;
+            }
+
+            .validation-item {
+                padding: 1rem;
+                border-radius: 6px;
+                margin-bottom: 1rem;
+                border: 1px solid #e0e0e0;
+            }
+
+            .validation-item.has-errors {
+                background: #ffebee;
+                border-color: #f44336;
+            }
+
+            .validation-item.has-warnings {
+                background: #fff3e0;
+                border-color: #ff9800;
+            }
+
+            .validation-item-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0.5rem;
+            }
+
+            .item-name {
+                font-weight: 600;
+                color: #333;
+            }
+
+            .btn-link {
+                background: none;
+                border: none;
+                color: #2196f3;
+                cursor: pointer;
+                text-decoration: underline;
+                font-size: 0.9rem;
+            }
+
+            .btn-link:hover {
+                color: #1976d2;
+            }
+
+            .error-list,
+            .warning-list {
+                margin: 0.5rem 0 0 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            .error-list li.error {
+                color: #c62828;
+                margin-bottom: 0.25rem;
+            }
+
+            .warning-list li.warning {
+                color: #ef6c00;
+                margin-bottom: 0.25rem;
+            }
+
+            .validation-success {
+                padding: 2rem;
+                text-align: center;
+                color: #2e7d32;
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 2000;
+            }
+
+            .modal-content {
+                background: white;
+                border-radius: 12px;
+                max-width: 600px;
+                max-height: 80vh;
+                overflow-y: auto;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                width: 90%;
+            }
+
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.5rem;
+                border-bottom: 1px solid #eee;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+
+            .modal-footer {
+                display: flex;
+                justify-content: flex-end;
+                gap: 1rem;
+                padding: 1.5rem;
+                border-top: 1px solid #eee;
+            }
+
+            .auto-fill-summary {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .fill-stat {
+                display: inline-block;
+                background: #e8f5e8;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                border-left: 4px solid #4caf50;
+            }
+
+            .fill-number {
+                display: block;
+                font-size: 2rem;
+                font-weight: 700;
+                color: #4caf50;
+            }
+
+            .fill-label {
+                display: block;
+                font-size: 0.9rem;
+                color: #666;
+                margin-top: 0.25rem;
+            }
+
+            .fill-log-items {
+                max-height: 200px;
+                overflow-y: auto;
+                background: #f8f9fa;
+                border-radius: 6px;
+                padding: 1rem;
+            }
+
+            .log-item {
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #e0e0e0;
+                font-size: 0.9rem;
+            }
+
+            .log-item:last-child {
+                border-bottom: none;
+            }
+
+            .log-item.more {
+                font-style: italic;
+                color: #666;
+            }
+
+            .notification-container {
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                z-index: 3000;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .notification {
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+                padding: 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-width: 300px;
+                animation: slideInRight 0.3s ease-out;
+            }
+
+            .notification.success {
+                border-left: 4px solid #4caf50;
+            }
+
+            .notification.error {
+                border-left: 4px solid #f44336;
+            }
+
+            .notification.info {
+                border-left: 4px solid #2196f3;
+            }
+
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+
+            .notification-content {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .notification-close {
+                background: none;
+                border: none;
+                font-size: 1.2rem;
+                cursor: pointer;
+                color: #666;
+                padding: 0.25rem;
+            }
+
+            .btn-close {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #666;
+                padding: 0.5rem;
+                border-radius: 4px;
+            }
+
+            .btn-close:hover {
+                background: #f0f0f0;
+            }
+
+            /* Responsive Design for Enhanced Interface */
+            @media (max-width: 768px) {
+                .import-review-container.enhanced {
+                    padding: 1rem;
+                }
+                
+                .review-controls {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                
+                .view-toggles,
+                .bulk-actions {
+                    justify-content: center;
+                }
+                
+                .form-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .item-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 1rem;
+                }
+                
+                .item-header-actions {
+                    align-self: stretch;
+                    justify-content: space-between;
+                }
+                
+                .item-quick-info {
+                    flex-direction: column;
+                    gap: 0.5rem;
+                }
+                
+                .item-actions {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                
+                .action-group {
+                    justify-content: center;
+                }
+                
+                .review-actions.enhanced {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                
+                .validation-stats {
+                    justify-content: center;
+                }
+            }
+        `;
+        
+        document.head.appendChild(style);
+    }
+
+    /**
+     * Setup keyboard shortcuts
+     */
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + S: Save draft
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                this.saveDraft();
+            }
+            
+            // Ctrl/Cmd + Enter: Apply import
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                this.applyImport();
+            }
+            
+            // Ctrl/Cmd + E: Expand all
+            if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+                e.preventDefault();
+                this.expandAllItems();
+            }
+            
+            // Ctrl/Cmd + R: Collapse all
+            if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+                e.preventDefault();
+                this.collapseAllItems();
+            }
+        });
+    }
+
+    // Helper methods
+    getCategoryOptions(selected) {
+        const categories = [
+            'Unknown', 'Produce', 'Meat', 'Dairy', 'Pantry', 'Frozen', 
+            'Beverages', 'Bakery', 'Seafood', 'Poultry', 'Condiments', 
+            'Spices', 'Cleaning', 'Paper Products', 'Other'
+        ];
+        
+        return categories.map(cat => 
+            `<option value="${cat}" ${cat === selected ? 'selected' : ''}>${cat}</option>`
+        ).join('');
+    }
+
+    getUnitTypeOptions(selected) {
+        const units = [
+            'OZ', 'LB', 'G', 'KG', 'ML', 'L', 'GAL', 'QT', 'PT', 'CUP', 
+            'TBSP', 'TSP', 'CT', 'EA', 'PKG', 'BOX', 'BAG', 'CAN', 'BTL'
+        ];
+        
+        return units.map(unit => 
+            `<option value="${unit}" ${unit === selected ? 'selected' : ''}>${unit}</option>`
+        ).join('');
+    }
+
+    getAreaOptions(selected) {
+        const areas = [
+            '', 'Kitchen', 'Walk-in Cooler', 'Walk-in Freezer', 'Dry Storage', 
+            'Bar', 'Prep Area', 'Bakery', 'Receiving', 'Office'
+        ];
+        
+        return areas.map(area => 
+            `<option value="${area}" ${area === selected ? 'selected' : ''}>${area || 'Not Specified'}</option>`
+        ).join('');
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    formatPortionSize(size, unit) {
+        if (!size || !unit) return '';
+        return `${size} ${unit}`;
+    }
 }
 
 // Export for module system
@@ -1505,4 +3058,4 @@ export default {
     }
 };
 
-console.log('📊 SECURE Enhanced Invoice Import Module loaded - Sensitive data protected, header sections skipped');
+console.log('📊 Enhanced Invoice Import Module loaded with comprehensive review system');

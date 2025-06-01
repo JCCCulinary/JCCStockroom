@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "lastModified": "2025-05-22T18:59:40.460554Z",
+  "locations": [
+    "Cooler",
+    "Freezer",
+    "Dry Storage",
+    "Walk-In"
+  ],
+  "categories": [
+    "Protein",
+    "Produce",
+    "Dairy",
+    "Dry Goods",
+    "Beverage"
+  ],
+  "defaultTaxRate": 0.0925
+}

@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "lastModified": "2025-05-22T18:59:40.460545Z",
+  "orders": [
+    {
+      "id": "order-001",
+      "date": "2025-05-21",
+      "items": [
+        {
+          "id": "item-001",
+          "quantity": 30,
+          "cost": 2.75
+        }
+      ],
+      "supplier": "US Foods",
+      "total": 82.5
+    }
+  ]
+}

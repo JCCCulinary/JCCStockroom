@@ -1,0 +1,29 @@
+
+/* item-info.css (new, refactored) */
+
+.item-info-page {
+  padding: var(--spacing-lg);
+  background-color: var(--bg-primary);
+}
+
+.description-text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: var(--leading-normal);
+}
+
+.edit-item-btn {
+  min-width: 44px;
+  min-height: 44px;
+  background-color: var(--color-info);
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  .item-info-page {
+    display: flex;
+    gap: var(--spacing-lg);
+  }
+}

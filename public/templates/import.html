@@ -1,544 +1,879 @@
-<!-- templates/import.html - CustomerFirst Invoice Import System -->
-<div class="import-module">
+<!-- templates/import.html - Enhanced Invoice Import -->
+<div class="import-module enhanced">
+  <!-- Import Header -->
   <div class="import-header">
-    <h2>Invoice Import</h2>
-    <p class="import-subtitle">Upload vendor invoices to automatically update inventory</p>
+    <h2 class="page-title">📊 Enhanced Invoice Import</h2>
+    <p class="lead">Upload, review, and edit vendor invoices with comprehensive data control</p>
   </div>
 
   <!-- Step 1: File Upload -->
-  <div id="upload-section" class="import-section">
-    <div class="upload-zone" id="upload-zone">
-      <div class="upload-icon">📁</div>
-      <h3>Upload Invoice</h3>
-      <p>Drag and drop your invoice file here, or click to browse</p>
-      <p class="upload-formats">Supported: CSV, PDF, Excel</p>
-      <input type="file" id="file-input" accept=".csv,.pdf,.xlsx,.xls" hidden>
-      <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
-        Choose File
-      </button>
-    </div>
-    
-    <div id="file-info" class="file-info" style="display: none;">
-      <div class="file-details">
-        <span id="file-name"></span>
-        <span id="file-size"></span>
-        <span id="detected-vendor"></span>
+  <div id="upload-section" class="import-step active">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">📁 Upload Invoice File</h3>
+        <p class="card-subtitle">Supports CSV, PDF, and Excel files from multiple vendors</p>
       </div>
-      <button id="remove-file" class="btn btn-secondary">Remove File</button>
-    </div>
-  </div>
-
-  <!-- Step 2: Processing Status -->
-  <div id="processing-section" class="import-section" style="display: none;">
-    <div class="processing-status">
-      <div class="spinner"></div>
-      <h3>Processing Invoice...</h3>
-      <p id="processing-message">Analyzing file and extracting data...</p>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Step 3: Data Preview -->
-  <div id="preview-section" class="import-section" style="display: none;">
-    <div class="section-header">
-      <h3>📊 Invoice Data Preview</h3>
-      <div class="invoice-summary">
-        <span>Invoice Date: <strong id="invoice-date"></strong></span>
-        <span>Vendor: <strong id="vendor-name"></strong></span>
-        <span>Items: <strong id="item-count"></strong></span>
-        <span>Total: <strong id="invoice-total"></strong></span>
-      </div>
-    </div>
-    
-    <div class="preview-table-container">
-      <table class="preview-table">
-        <thead>
-          <tr>
-            <th>Product #</th>
-            <th>Description</th>
-            <th>Brand</th>
-            <th>Pack Size</th>
-            <th>Qty Shipped</th>
-            <th>Case Cost</th>
-            <th>Units/Case</th>
-            <th>Unit Cost</th>
-          </tr>
-        </thead>
-        <tbody id="preview-table-body">
-          <!-- Populated by JavaScript -->
-        </tbody>
-      </table>
-    </div>
-    
-    <div class="preview-actions">
-      <button id="proceed-to-matching" class="btn btn-primary">Proceed to Matching</button>
-      <button id="cancel-import" class="btn btn-secondary">Cancel Import</button>
-    </div>
-  </div>
-
-  <!-- Step 4: Item Matching & Review -->
-  <div id="matching-section" class="import-section" style="display: none;">
-    <div class="section-header">
-      <h3>🎯 Item Matching & Review</h3>
-      <div class="matching-summary">
-        <div class="match-stats">
-          <span class="stat auto-matched">
-            <span id="auto-matched-count">0</span> Auto-matched
-          </span>
-          <span class="stat needs-review">
-            <span id="needs-review-count">0</span> Needs Review
-          </span>
-          <span class="stat new-items">
-            <span id="new-items-count">0</span> New Items
-          </span>
+      
+      <div class="card-body">
+        <div class="upload-zone" id="upload-zone">
+          <div class="upload-icon">📁</div>
+          <h4>Drop invoice file here or click to browse</h4>
+          <p class="upload-description">Supports: CSV (CustomerFirst), PDF (Ben E. Keith, Gordon Food Service, McCartney)</p>
+          <input type="file" id="file-input" accept=".csv,.pdf,.xlsx,.xls" hidden>
+          <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+            Choose File
+          </button>
+        </div>
+        
+        <div id="file-info" class="file-info-display" style="display: none;">
+          <div class="file-details">
+            <div class="file-icon">📄</div>
+            <div class="file-metadata">
+              <div class="file-name" id="file-name"></div>
+              <div class="file-size" id="file-size"></div>
+              <div class="detected-vendor" id="detected-vendor"></div>
+            </div>
+          </div>
+          <button id="remove-file" class="btn btn-secondary btn-sm">Remove</button>
+        </div>
+        
+        <!-- Enhanced Import Features Preview -->
+        <div class="import-features">
+          <div class="feature">
+            <span class="feature-icon">🔍</span>
+            <div class="feature-content">
+              <h5>Smart Vendor Detection</h5>
+              <p>Automatically identifies vendor format and extracts data accordingly</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">📏</span>
+            <div class="feature-content">
+              <h5>Portion Size Detection</h5>
+              <p>Parses portion sizes like "6 OZ", "1/4 LB" from product descriptions</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✏️</span>
+            <div class="feature-content">
+              <h5>Comprehensive Editing</h5>
+              <p>Review and edit all data fields before importing to inventory</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">🎯</span>
+            <div class="feature-content">
+              <h5>Smart Matching</h5>
+              <p>Matches imported items to existing inventory with confidence scoring</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">🪄</span>
+            <div class="feature-content">
+              <h5>Auto-Fill Missing Data</h5>
+              <p>Intelligently fills categories, locations, and default values</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✅</span>
+            <div class="feature-content">
+              <h5>Advanced Validation</h5>
+              <p>Comprehensive validation with detailed error reporting</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Auto-matched Items -->
-    <div class="match-category auto-matched-section">
-      <h4>🟢 Auto-Matched Items (<span id="auto-matched-total">0</span>)</h4>
-      <div class="match-items" id="auto-matched-items">
-        <!-- Populated by JavaScript -->
+  <!-- Step 2: Processing -->
+  <div id="processing-section" class="import-step" style="display: none;">
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="processing-animation">
+          <div class="spinner-large"></div>
+          <div class="processing-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <h3 class="processing-title">Processing Invoice...</h3>
+        <p id="processing-message" class="processing-message">Analyzing file and extracting data...</p>
+        
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="progress-text" id="progress-text">0%</div>
+        </div>
+        
+        <div class="processing-steps" id="processing-steps">
+          <div class="step-item" data-step="upload">
+            <span class="step-icon">📁</span>
+            <span class="step-text">File Upload</span>
+            <span class="step-status">✓</span>
+          </div>
+          <div class="step-item" data-step="extract">
+            <span class="step-icon">📄</span>
+            <span class="step-text">Data Extraction</span>
+            <span class="step-status">⏳</span>
+          </div>
+          <div class="step-item" data-step="parse">
+            <span class="step-icon">🔍</span>
+            <span class="step-text">Parsing Items</span>
+            <span class="step-status">⏳</span>
+          </div>
+          <div class="step-item" data-step="match">
+            <span class="step-icon">🎯</span>
+            <span class="step-text">Matching Inventory</span>
+            <span class="step-status">⏳</span>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Items Needing Review -->
-    <div class="match-category needs-review-section">
-      <h4>🟡 Items Needing Review (<span id="needs-review-total">0</span>)</h4>
-      <div class="match-items" id="needs-review-items">
-        <!-- Populated by JavaScript -->
+  <!-- Step 3: Data Preview (Optional - can be skipped in enhanced mode) -->
+  <div id="preview-section" class="import-step" style="display: none;">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">📊 Invoice Data Preview</h3>
+        <div class="preview-meta">
+          <span>Invoice Date: <strong id="invoice-date"></strong></span>
+          <span>Vendor: <strong id="vendor-name"></strong></span>
+          <span>Items: <strong id="item-count"></strong></span>
+          <span>Total: <strong id="invoice-total"></strong></span>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Product #</th>
+                <th>Description</th>
+                <th>Brand</th>
+                <th>Pack Size</th>
+                <th>Qty Shipped</th>
+                <th>Case Cost</th>
+                <th>Units/Case</th>
+                <th>Unit Cost</th>
+              </tr>
+            </thead>
+            <tbody id="preview-table-body">
+              <!-- Populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="card-footer">
+        <div class="btn-toolbar">
+          <button id="proceed-to-review" class="btn btn-primary">Proceed to Enhanced Review</button>
+          <button id="cancel-import" class="btn btn-secondary">Cancel Import</button>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- New Items -->
-    <div class="match-category new-items-section">
-      <h4>🔴 New Items (<span id="new-items-total">0</span>)</h4>
-      <div class="match-items" id="new-items-list">
-        <!-- Populated by JavaScript -->
+  <!-- Step 4: Enhanced Review Interface -->
+  <div id="review-section" class="import-step" style="display: none;">
+    <!-- This will be populated by the enhanced JavaScript -->
+    <div id="enhanced-review-container">
+      <!-- Enhanced review interface will be inserted here -->
+      <div class="loading-placeholder" style="text-align: center; padding: 4rem;">
+        <div class="processing-spinner"></div>
+        <h3>Loading Enhanced Review Interface...</h3>
+        <p>Preparing comprehensive data editing capabilities...</p>
       </div>
-    </div>
-
-    <div class="matching-actions">
-      <button id="apply-changes" class="btn btn-success">Apply All Changes</button>
-      <button id="back-to-preview" class="btn btn-secondary">Back to Preview</button>
-      <button id="cancel-matching" class="btn btn-secondary">Cancel Import</button>
     </div>
   </div>
 
   <!-- Step 5: Import Complete -->
-  <div id="complete-section" class="import-section" style="display: none;">
-    <div class="import-success">
-      <div class="success-icon">✅</div>
-      <h3>Import Complete!</h3>
-      <div class="import-results">
-        <p><strong id="items-updated">0</strong> items updated</p>
-        <p><strong id="items-created">0</strong> new items created</p>
-        <p><strong id="total-value-imported">$0.00</strong> total value imported</p>
-      </div>
-      
-      <div class="complete-actions">
-        <button id="view-inventory" class="btn btn-primary">View Inventory</button>
-        <button id="import-another" class="btn btn-secondary">Import Another Invoice</button>
-        <button id="download-summary" class="btn btn-secondary">Download Summary</button>
+  <div id="complete-section" class="import-step" style="display: none;">
+    <div class="card success-card">
+      <div class="card-body text-center">
+        <div class="success-animation">
+          <div class="checkmark-circle">
+            <div class="checkmark"></div>
+          </div>
+        </div>
+        
+        <h2 class="success-title">🎉 Import Successful!</h2>
+        <p class="success-message">Your invoice has been successfully processed and imported into inventory.</p>
+        
+        <div class="success-stats" id="success-stats">
+          <div class="stat-card">
+            <div class="stat-number" id="items-updated">0</div>
+            <div class="stat-label">Items Updated</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="items-created">0</div>
+            <div class="stat-label">New Items Created</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="total-value">$0.00</div>
+            <div class="stat-label">Total Value</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="portions-detected">0</div>
+            <div class="stat-label">Portions Detected</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="auto-filled-fields">0</div>
+            <div class="stat-label">Auto-Filled Fields</div>
+          </div>
+        </div>
+        
+        <div class="success-actions">
+          <button id="view-inventory" class="btn btn-primary btn-lg">
+            <span class="btn-icon">📦</span>
+            View Updated Inventory
+          </button>
+          <button id="download-report" class="btn btn-secondary">
+            <span class="btn-icon">📊</span>
+            Download Import Report
+          </button>
+          <button id="import-another" class="btn btn-secondary">
+            <span class="btn-icon">📁</span>
+            Import Another Invoice
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Error Display -->
-  <div id="error-section" class="import-section error-section" style="display: none;">
-    <div class="error-content">
-      <div class="error-icon">❌</div>
-      <h3>Import Error</h3>
-      <p id="error-message">An error occurred during import.</p>
-      <div class="error-actions">
-        <button id="retry-import" class="btn btn-primary">Try Again</button>
-        <button id="start-over" class="btn btn-secondary">Start Over</button>
+  <!-- Error Section -->
+  <div id="error-section" class="import-step error-step" style="display: none;">
+    <div class="card error-card">
+      <div class="card-body text-center">
+        <div class="error-animation">
+          <div class="error-icon">❌</div>
+        </div>
+        
+        <h2 class="error-title">Import Failed</h2>
+        <p id="error-message" class="error-message">An error occurred while processing your invoice.</p>
+        
+        <div class="error-details" id="error-details" style="display: none;">
+          <h4>Error Details:</h4>
+          <div class="error-log" id="error-log"></div>
+        </div>
+        
+        <div class="error-help">
+          <h4>Common Solutions:</h4>
+          <ul class="help-list">
+            <li>Ensure the file is not corrupted or password protected</li>
+            <li>Check that the file format is supported (CSV, PDF, Excel)</li>
+            <li>Verify the file contains recognizable invoice data</li>
+            <li>Try saving the file in a different format</li>
+            <li>Make sure the vendor format is supported (CustomerFirst, Ben E. Keith, etc.)</li>
+          </ul>
+        </div>
+        
+        <div class="error-actions">
+          <button id="retry-import" class="btn btn-primary">
+            <span class="btn-icon">🔄</span>
+            Try Again
+          </button>
+          <button id="contact-support" class="btn btn-secondary">
+            <span class="btn-icon">📞</span>
+            Contact Support
+          </button>
+          <button id="start-over" class="btn btn-secondary">
+            <span class="btn-icon">🏠</span>
+            Start Over
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import History Sidebar (Optional) -->
+  <div id="import-history" class="import-sidebar" style="display: none;">
+    <div class="sidebar-header">
+      <h4>📋 Recent Imports</h4>
+      <button class="btn-close" onclick="toggleImportHistory()">×</button>
+    </div>
+    <div class="sidebar-content">
+      <div class="history-list" id="history-list">
+        <div class="history-item">
+          <div class="history-date">2024-03-15</div>
+          <div class="history-vendor">Ben E. Keith</div>
+          <div class="history-items">24 items imported</div>
+        </div>
+        <div class="history-item">
+          <div class="history-date">2024-03-12</div>
+          <div class="history-vendor">CustomerFirst</div>
+          <div class="history-items">18 items imported</div>
+        </div>
+        <!-- More history items will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Panel (Optional) -->
+  <div id="help-panel" class="help-overlay" style="display: none;">
+    <div class="help-content">
+      <div class="help-header">
+        <h3>📚 Enhanced Import Help Guide</h3>
+        <button class="btn-close" onclick="toggleHelpPanel()">×</button>
+      </div>
+      <div class="help-body">
+        <div class="help-section">
+          <h4>Supported File Formats</h4>
+          <ul>
+            <li><strong>CSV:</strong> CustomerFirst format with product descriptions and pricing</li>
+            <li><strong>PDF:</strong> Ben E. Keith, Gordon Food Service, McCartney Produce invoices</li>
+            <li><strong>Excel:</strong> Standard invoice formats (upcoming feature)</li>
+          </ul>
+        </div>
+        
+        <div class="help-section">
+          <h4>Enhanced Review Process</h4>
+          <p>After upload, you can review and edit all imported data including:</p>
+          <ul>
+            <li>Product names and descriptions</li>
+            <li>Pack sizes and unit measurements</li>
+            <li>Pricing and cost information</li>
+            <li>Portion sizes and nutritional data</li>
+            <li>Storage locations and categories</li>
+            <li>Par levels and inventory settings</li>
+          </ul>
+        </div>
+        
+        <div class="help-section">
+          <h4>Auto-Fill & Validation</h4>
+          <p>The system automatically:</p>
+          <ul>
+            <li>Detects categories from product names</li>
+            <li>Suggests storage locations and areas</li>
+            <li>Calculates suggested par levels</li>
+            <li>Validates all required fields</li>
+            <li>Provides warnings for potential issues</li>
+          </ul>
+        </div>
+        
+        <div class="help-section">
+          <h4>Keyboard Shortcuts</h4>
+          <ul>
+            <li><kbd>Ctrl+S</kbd> - Save as draft</li>
+            <li><kbd>Ctrl+Enter</kbd> - Apply import</li>
+            <li><kbd>Ctrl+E</kbd> - Expand all items</li>
+            <li><kbd>Ctrl+R</kbd> - Collapse all items</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Floating Action Buttons -->
+<div class="floating-actions">
+  <button class="fab" onclick="toggleHelpPanel()" title="Help & Guide">
+    <span class="fab-icon">❓</span>
+  </button>
+  <button class="fab" onclick="toggleImportHistory()" title="Import History">
+    <span class="fab-icon">📋</span>
+  </button>
+  <button class="fab" onclick="toggleDraftsList()" title="Saved Drafts">
+    <span class="fab-icon">💾</span>
+  </button>
+</div>
+
 <style>
-/* Import Module Styles */
-.import-module {
-  max-width: 1200px;
+/* Additional styles for enhanced template */
+.import-module.enhanced {
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-.import-header {
-  text-align: center;
-  margin-bottom: 3rem;
+.import-step {
+  margin-bottom: 2rem;
 }
 
-.import-subtitle {
-  color: #6c757d;
-  font-size: 1.1rem;
+.card-subtitle {
+  color: #666;
+  font-size: 0.9rem;
   margin-top: 0.5rem;
 }
 
-.import-section {
-  background: white;
-  border-radius: 8px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.upload-description {
+  margin-bottom: 1.5rem;
+  color: #666;
 }
 
-/* Upload Zone */
-.upload-zone {
-  border: 3px dashed #dee2e6;
-  border-radius: 8px;
-  padding: 3rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.upload-zone:hover {
-  border-color: #007bff;
-  background-color: #f8f9fa;
-}
-
-.upload-zone.dragover {
-  border-color: #007bff;
-  background-color: #e3f2fd;
-}
-
-.upload-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-}
-
-.upload-formats {
-  font-size: 0.9rem;
-  color: #6c757d;
-  margin: 1rem 0;
-}
-
-.file-info {
+.file-info-display {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
   margin-top: 1rem;
 }
 
 .file-details {
   display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-icon {
+  font-size: 2rem;
+}
+
+.file-metadata {
+  display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-/* Processing Status */
-.processing-status {
+.file-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.file-size {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.detected-vendor {
+  font-size: 0.8rem;
+  color: #2196f3;
+  font-weight: 500;
+}
+
+.preview-meta {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.success-animation {
+  margin-bottom: 2rem;
+}
+
+.checkmark-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #4caf50;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.5s ease-out;
+}
+
+.checkmark {
+  width: 30px;
+  height: 15px;
+  border-left: 3px solid white;
+  border-bottom: 3px solid white;
+  transform: rotate(-45deg);
+  animation: checkmark 0.3s ease-out 0.2s both;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+@keyframes checkmark {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.success-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   text-align: center;
 }
 
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #007bff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 1rem;
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4caf50;
+  margin-bottom: 0.5rem;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.success-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.btn-icon {
+  margin-right: 0.5rem;
+}
+
+.error-animation {
+  margin-bottom: 2rem;
+}
+
+.error-icon {
+  font-size: 4rem;
+  color: #f44336;
+}
+
+.error-help {
+  text-align: left;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.help-list {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.help-list li {
+  margin-bottom: 0.5rem;
+}
+
+.floating-actions {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 1000;
+}
+
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #2196f3;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.fab:hover {
+  background: #1976d2;
+  transform: scale(1.1);
+}
+
+.fab-icon {
+  font-size: 1.5rem;
+}
+
+.help-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  margin: 1rem;
+}
+
+.help-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.help-body {
+  padding: 1.5rem;
+}
+
+.help-section {
+  margin-bottom: 2rem;
+}
+
+.help-section h4 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.help-section ul {
+  padding-left: 1.5rem;
+}
+
+.help-section li {
+  margin-bottom: 0.5rem;
+}
+
+.import-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 100vh;
+  background: white;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.1);
+  z-index: 1500;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.import-sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.sidebar-content {
+  padding: 1rem;
+}
+
+.history-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.history-item:hover {
+  background: #f8f9fa;
+}
+
+.history-date {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.history-vendor {
+  font-weight: 600;
+  color: #333;
+  margin: 0.25rem 0;
+}
+
+.history-items {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+kbd {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 0.2rem 0.4rem;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.loading-placeholder {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .import-module.enhanced {
+    padding: 1rem;
+  }
+  
+  .floating-actions {
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
+  .help-content {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+  
+  .import-sidebar {
+    width: 100%;
+  }
+  
+  .success-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .success-actions {
+    flex-direction: column;
+  }
+  
+  .preview-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .file-info-display {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+}
+
+/* Additional processing animation styles */
+.processing-animation {
+  margin-bottom: 2rem;
+}
+
+.spinner-large {
+  width: 80px;
+  height: 80px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2196f3;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+.processing-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.processing-dots span {
+  width: 8px;
+  height: 8px;
+  background: #2196f3;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite both;
+}
+
+.processing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.processing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 40% { 
+    transform: scale(1);
+  }
+}
+
+.progress-container {
+  margin: 2rem 0;
 }
 
 .progress-bar {
   width: 100%;
   height: 8px;
-  background: #e9ecef;
+  background: #e0e0e0;
   border-radius: 4px;
-  margin-top: 1rem;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: #007bff;
-  width: 0%;
+  background: linear-gradient(90deg, #2196f3, #4caf50);
   transition: width 0.3s ease;
+  width: 0%;
 }
 
-/* Section Headers */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.invoice-summary {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-.invoice-summary span {
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
-/* Preview Table */
-.preview-table-container {
-  overflow-x: auto;
-  margin-bottom: 1.5rem;
-}
-
-.preview-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.preview-table th,
-.preview-table td {
-  padding: 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.preview-table th {
-  background: #f8f9fa;
+.progress-text {
+  text-align: center;
+  margin-top: 0.5rem;
   font-weight: 600;
-  position: sticky;
-  top: 0;
+  color: #333;
 }
 
-.preview-table tr:hover {
-  background: #f8f9fa;
-}
-
-/* Matching Summary */
-.matching-summary {
-  margin-bottom: 2rem;
-}
-
-.match-stats {
+.processing-steps {
   display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-  border-radius: 6px;
-  min-width: 120px;
-}
-
-.stat.auto-matched {
-  background: #d4edda;
-  color: #155724;
-}
-
-.stat.needs-review {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.stat.new-items {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-.stat span:first-child {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-/* Match Categories */
-.match-category {
-  margin-bottom: 2rem;
-}
-
-.match-category h4 {
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #dee2e6;
-}
-
-.match-items {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.match-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  background: white;
-}
-
-.match-item.auto-matched {
-  border-left: 4px solid #28a745;
-  background: #f8fff9;
-}
-
-.match-item.needs-review {
-  border-left: 4px solid #ffc107;
-  background: #fffef8;
-}
-
-.match-item.new-item {
-  border-left: 4px solid #dc3545;
-  background: #fff8f8;
-}
-
-.item-info {
-  flex: 1;
-}
-
-.item-name {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.item-details {
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
-.match-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* Action Buttons */
-.preview-actions,
-.matching-actions,
-.complete-actions,
-.error-actions {
-  display: flex;
-  gap: 1rem;
   justify-content: center;
+  gap: 2rem;
   margin-top: 2rem;
   flex-wrap: wrap;
 }
 
-/* Success/Error States */
-.import-success,
-.error-content {
-  text-align: center;
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 80px;
 }
 
-.success-icon,
-.error-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+.step-icon {
+  font-size: 1.5rem;
 }
 
-.import-results {
-  background: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 6px;
-  margin: 1.5rem 0;
-}
-
-.import-results p {
-  margin: 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-.error-section {
-  border-left: 4px solid #dc3545;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .import-module {
-    padding: 1rem;
-  }
-  
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .invoice-summary,
-  .match-stats {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .match-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .match-actions {
-    width: 100%;
-    justify-content: stretch;
-  }
-  
-  .match-actions button {
-    flex: 1;
-  }
-}
-
-/* Button Styles */
-.btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-}
-
-.btn-primary {
-  background: #007bff;
-  color: white;
-}
-
-.btn-primary:hover {
-  background: #0056b3;
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: #545b62;
-}
-
-.btn-success {
-  background: #28a745;
-  color: white;
-}
-
-.btn-success:hover {
-  background: #1e7e34;
-}
-
-.btn-sm {
-  padding: 0.375rem 0.75rem;
+.step-text {
   font-size: 0.8rem;
+  color: #666;
+  text-align: center;
 }
+
+.step-status {
+  font-size: 1.2rem;
+}
+
+/* Global functions for the template */
+window.toggleHelpPanel = function() {
+  const panel = document.getElementById('help-panel');
+  panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+};
+
+window.toggleImportHistory = function() {
+  const sidebar = document.getElementById('import-history');
+  sidebar.classList.toggle('open');
+};
+
+window.toggleDraftsList = function() {
+  console.log('Drafts list feature coming soon');
+};
 </style>
